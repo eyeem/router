@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+    repositories {
+        jcenter()
+//        maven {
+//            url "http://dl.bintray.com/wisniewski/gradle-plugins"
+//        }
+        flatDir {
+            dirs  "../router-validator/build/libs"
+        }
+    }
+    dependencies {
+        classpath 'com.eyeem.routervalidator:router-validator:0.0.1.4'
+        // these are required for local builds
+        classpath 'com.eyeem.routervalidator:router-validator:0.0.1.4'
+        classpath 'org.yaml:snakeyaml:1.8'
+    }
+}
+
+apply plugin: 'com.eyeem.routervalidator'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "eyeem.com.samplenav"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+router {
+    path = "${project.rootDir}/app/src/main/assets/map.yaml"
+    packageName = "org.vishna.test"
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'org.yaml:snakeyaml:1.8'
+    compile project(':router')
+}

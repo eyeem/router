@@ -1,0 +1,70 @@
+---
+'home' :
+  type: 'f4'
+  decorators:
+    - FantasticFourDecorator :
+        tabNumber : '%{tabNumber}'
+    - 'com.baseapp.eyeem.bus.SubTrack$FantasticFourTrack'
+    - InstagramUpsellDecorator : {}
+'discover' :
+  request :
+    path : '/v2/discover/batch'
+    jsonpath : 'discover.items'
+    defaults : false
+  type : 'discover'
+  decorators :
+    - SearchDiscoverDecorator
+    - ColumnsDecorator :
+        staggered : '%{isTablet}'
+  holders :
+    - CardResolver
+    - CardMission
+    - CardBlogPost
+    - CardGridUser
+    - CardGridAlbum
+'feed/follow' :
+  request :
+    path : '/v2/feed/follow'
+    jsonpath : 'follow.items'
+  type : 'feedFollow'
+  decorators :
+    - ColumnsDecorator :
+        staggered : '%{isTablet}'
+        topMargin : 'dimen.grid_top_padding'
+    - FeedDedupeDecorator
+  holders :
+    - FeedResolver
+    - FeedPhoto
+    - FeedPhotoGroup
+    - FeedAlbum
+'news' :
+  request :
+    path : '/v2/news'
+    jsonpath : 'news.items'
+    pagination : 'com.eyeem.sdk.pagination.NewsPagination'
+    declutter : 'com.baseapp.eyeem.fragment.decorator.NewsDecorator$NewsPathDeclutter'
+    params:
+      aggregated : 1
+  type : 'news'
+  decorators :
+    - NewsDecorator
+    - MissionsInNewsDecorator
+  holders :
+    - NewsResolver
+    - NewsPhotoTextHolder
+    - NewsMultiPhotoHolder
+'u/:id' :
+  request :
+    path : '/v2/users/%{id}/photos'
+    jsonpath : 'photos.items'
+  type : 'user'
+  decorators :
+    - AppIndexUserDecorator
+    - HeaderRecyclerDecorator
+    - UserMenuDecorator
+    - UserFollowMenuDecorator : {} # empty config map triggers configFor static method
+    - UserTitleDecorator
+    - UserAlbumHeaderInstigator
+    - BlockedUserDecorator
+    - UpIsUpDecorator
+  grid : true
