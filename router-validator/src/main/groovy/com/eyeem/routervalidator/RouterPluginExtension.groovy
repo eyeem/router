@@ -3,4 +3,6 @@ package com.eyeem.routervalidator
 class RouterPluginExtension {
     String path
     String packageName
+    String decoratorsPackageName
+    String holdersPackageName
 }

@@ -44,7 +44,9 @@ android {
 
 router {
     path = "${project.rootDir}/app/src/main/assets/map.yaml"
-    packageName = "org.vishna.test"
+    packageName = "com.eyeem.router"
+    decoratorsPackageName = "com.baseapp.eyeem.fragment.decorator"
+    holdersPackageName = "com.eyeem.holders"
 }
 
 dependencies {

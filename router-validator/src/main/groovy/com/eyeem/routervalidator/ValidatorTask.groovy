@@ -31,18 +31,23 @@ class ValidatorTask extends DefaultTask {
 
     @TaskAction
     def validate() {
+        ArrayList<String> _paths = new ArrayList<>();
 
-        def templateData = []
+        String yamlString = new File(yamlFile).getText('UTF-8')
+        Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlString);
+        routerMap.each {
+            k, v -> _paths.add(k);
+        }
+
+        def templateData = [
+                paths : _paths
+        ]
 
         ClassEmitter emitter = [template    : Templates.SIMPLE,
                                 templateData: templateData,
                                 baseDir     : outputDir,
                                 packageName : packageName,
-                                className   : "ValidatorTest"]
+                                className   : "RouterConstants"]
         emitter.print()
-
-        String yamlString = new File(yamlFile).getText('UTF-8')
-        Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlString);
-        routerMap.each{ k, v -> println "${k}" }
     }
 }

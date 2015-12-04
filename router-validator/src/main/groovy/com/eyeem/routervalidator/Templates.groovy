@@ -6,6 +6,11 @@ class Templates {
 package $packageName;
 
 public final class $className {
+
+<% access.paths.eachWithIndex { item, index -> %>\\
+    public static final String PATH_$index = "$item";
+<% } %>\\
+
 }
 '''
 
