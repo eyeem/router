@@ -42,10 +42,11 @@ android {
 }
 
 router {
-    path = "${project.rootDir}/app/src/main/assets/map.yaml"
+    path = "app/src/main/assets/map.yaml"
     packageName = "com.eyeem.router"
     decoratorsPackageName = "com.baseapp.eyeem.fragment.decorator"
     holdersPackageName = "com.eyeem.holders"
+    resourcePackageName = "com.baseapp.eyeem"
 }
 
 dependencies {

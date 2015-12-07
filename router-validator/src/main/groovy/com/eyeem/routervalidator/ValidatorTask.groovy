@@ -1,13 +1,9 @@
 package com.eyeem.routervalidator
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs
-import org.gradle.api.tasks.incremental.InputFileDetails
 import org.yaml.snakeyaml.Yaml
 
 /**
@@ -18,6 +14,7 @@ class ValidatorTask extends DefaultTask {
     @Input String packageName
     @Input String decoratorsPackageName
     @Input String holdersPackageName
+    @Input String resourcePackageName
 
     /**
      * The output directory.
@@ -48,10 +45,11 @@ class ValidatorTask extends DefaultTask {
         }
 
         def templateData = [
-                nodes : nodes
+                nodes : nodes,
+                resourcePackageName : resourcePackageName
         ]
 
-        ClassEmitter emitter = [template    : Templates.load(getClass().getClassLoader(), "SIMPLE"),
+        ClassEmitter emitter = [template    : Templates.load(getClass().getClassLoader(), "RouterConstants"),
                                 templateData: templateData,
                                 baseDir     : outputDir,
                                 packageName : packageName,

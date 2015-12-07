@@ -5,4 +5,5 @@ class RouterPluginExtension {
     String packageName
     String decoratorsPackageName
     String holdersPackageName
+    String resourcePackageName
 }

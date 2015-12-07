@@ -34,10 +34,11 @@ class RouterPlugin implements Plugin<Project> {
                 File sourceFolder = project.file("${project.buildDir}/generated/source/router/${variant.dirName}")
                 Task validatorTask = project.task("validateRouterFor${variant.name.capitalize()}", type: ValidatorTask) {
                     outputDir = sourceFolder
-                    yamlFile = project.router.path
+                    yamlFile = "${project.rootDir}/${project.router.path}"
                     packageName = project.router.packageName
                     holdersPackageName = project.router.holdersPackageName
                     decoratorsPackageName = project.router.decoratorsPackageName
+                    resourcePackageName = project.router.resourcePackageName
                 }
 
                 variant.registerJavaGeneratingTask(validatorTask, validatorTask.outputDir)
