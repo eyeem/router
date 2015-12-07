@@ -16,7 +16,7 @@ class ClassEmitter {
         def targetDir = makeFileDir()
         new FileWriter("${targetDir}/${className}.java").withWriter { Writer writer ->
             engine.createTemplate(template)
-                    .make(access: templateData, packageName: packageName, className: className)
+                    .make(data: templateData, packageName: packageName, className: className)
                     .writeTo(writer)
         }
     }

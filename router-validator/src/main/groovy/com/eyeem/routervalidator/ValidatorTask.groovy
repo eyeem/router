@@ -42,7 +42,8 @@ class ValidatorTask extends DefaultTask {
                     path : key,
                     type : value.type,
                     decoratorsPackageName : decoratorsPackageName,
-                    holdersPackageName : decoratorsPackageName
+                    holdersPackageName : holdersPackageName,
+                    values : value
             ).parse());
         }
 

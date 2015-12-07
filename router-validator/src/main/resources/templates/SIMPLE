@@ -2,8 +2,18 @@ package $packageName;
 
 public final class $className {
 
-<% access.nodes.each { item -> %>\
-    public static final String PATH_${item.type.toUpperCase()} = "${item.path}";
+<% data.nodes.each { node -> %>\
+
+    // region ${node.type}
+
+    public static final String PATH_${node.type.toUpperCase()} = "${node.path}";
+    public static final String TYPE_${node.type.toUpperCase()} = "${node.type}";
+
+    // public static final Class[] DECORATORS_${node.type.toUpperCase()} = { ${node.decorators()} };
+    // public static final Class[] HOLDERS_${node.type.toUpperCase()} = { ${node.holders()} };
+
+    // endregion
+
 <% } %>\
 
 }
