@@ -1,4 +1,4 @@
-package eyeem.com.samplenav;
+package com.eyeem.samplenav;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,9 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import eyeem.com.router.Assets;
-import eyeem.com.router.Router;
-import eyeem.com.router.RouterLoader;
+import com.eyeem.router.Router;
+import com.eyeem.router.RouterLoader;
 
 public class MainActivity extends AppCompatActivity {
 

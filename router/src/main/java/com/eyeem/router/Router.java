@@ -1,4 +1,4 @@
-package eyeem.com.router;
+package com.eyeem.router;
 
 /*
     Routable for Android
