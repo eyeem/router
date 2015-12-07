@@ -13,7 +13,6 @@ buildscript {
     dependencies {
         classpath 'com.eyeem.routervalidator:router-validator:0.0.1.4'
         // these are required for local builds
-        classpath 'com.eyeem.routervalidator:router-validator:0.0.1.4'
         classpath 'org.yaml:snakeyaml:1.8'
     }
 }

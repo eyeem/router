@@ -3,7 +3,7 @@ package $packageName;
 public final class $className {
 
 <% access.nodes.each { item -> %>\
-    public static final String PATH_${item.type} = "${item.path}";
+    public static final String PATH_${item.type.toUpperCase()} = "${item.path}";
 <% } %>\
 
 }

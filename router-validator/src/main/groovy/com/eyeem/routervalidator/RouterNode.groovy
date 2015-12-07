@@ -1,12 +1,15 @@
 class RouterNode {
+
+    String decoratorsPackageName
+    String holdersPackageName
     String path;
     String type;
+
     ArrayList<String> usedDecoratorClasses;
     ArrayList<String> usedHolderClasses;
     ArrayList<String> usedResources;
 
-    RouterNode(String path, Map values) {
-        this.path = path
-        this.type = values.type
+    RouterNode parse() {
+        return this
     }
 }

@@ -15,8 +15,9 @@ import org.yaml.snakeyaml.Yaml
  */
 class ValidatorTask extends DefaultTask {
 
-    @Input
-    String packageName
+    @Input String packageName
+    @Input String decoratorsPackageName
+    @Input String holdersPackageName
 
     /**
      * The output directory.
@@ -37,7 +38,12 @@ class ValidatorTask extends DefaultTask {
         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlString);
 
         routerMap.each {
-            k, v -> nodes.add(new RouterNode(k, v));
+            key, value -> nodes.add(new RouterNode(
+                    path : key,
+                    type : value.type,
+                    decoratorsPackageName : decoratorsPackageName,
+                    holdersPackageName : decoratorsPackageName
+            ).parse());
         }
 
         def templateData = [

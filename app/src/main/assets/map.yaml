@@ -30,7 +30,7 @@
   decorators :
     - ColumnsDecorator :
         staggered : '%{isTablet}'
-        topMargin : 'dimen.grid_top_padding'
+        topMargin : 'R.dimen.grid_top_padding'
     - FeedDedupeDecorator
   holders :
     - FeedResolver

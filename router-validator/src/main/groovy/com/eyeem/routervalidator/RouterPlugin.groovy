@@ -36,6 +36,8 @@ class RouterPlugin implements Plugin<Project> {
                     outputDir = sourceFolder
                     yamlFile = project.router.path
                     packageName = project.router.packageName
+                    holdersPackageName = project.router.holdersPackageName
+                    decoratorsPackageName = project.router.decoratorsPackageName
                 }
 
                 variant.registerJavaGeneratingTask(validatorTask, validatorTask.outputDir)
