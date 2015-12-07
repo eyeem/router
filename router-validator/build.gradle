@@ -1,8 +1,12 @@
-plugins {
-    id 'nu.studer.plugindev' version '1.0.3'
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
 
-    // Should come along with plugindev, but plugindev uses an old version
-    id 'com.jfrog.bintray' version '1.2'
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
+    }
 }
 
 apply plugin: 'groovy'
@@ -24,36 +28,4 @@ dependencies {
 }
 
 // Plugin publishing
-
-group = 'com.eyeem.routervalidator'
-version = '0.0.1.4'
-
-plugindev {
-    pluginId 'com.eyeem.routervalidator'
-    pluginName 'router-validator'
-    pluginImplementationClass 'com.eyeem.routervalidator.RouterPlugin'
-    pluginDescription 'Gradle plugin that validates your router yaml file.'
-    pluginLicenses 'Apache-2.0'
-    pluginTags 'gradle', 'plugin', 'android'
-    authorId 'vishna'
-    authorName 'Lukasz Wisniewski'
-    authorEmail 'luke.cherrish@gmail.com'
-    projectUrl 'https://github.com/eyeem/router'
-    projectInceptionYear '2015'
-    done() // do not omit this
-}
-
-// If you want to upload this, make sure to set BINTRAY_USER and BINTRAY_API_KEY in gradle.properties
-if (project.hasProperty('BINTRAY_USER') && project.hasProperty('BINTRAY_API_KEY')) {
-    bintray {
-        dryRun = true // Turn off when actually deploying
-        publish = false // Maybe someday turn this on for auto-publishing
-
-        user = "$BINTRAY_USER"
-        key = "$BINTRAY_API_KEY"
-        pkg {
-            repo = 'gradle-plugins'
-            userOrg = 'eyeem'
-        }
-    }
-}
+apply from: '../gradle-mvn-push.gradle'

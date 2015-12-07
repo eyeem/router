@@ -30,3 +30,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'org.yaml:snakeyaml:1.8'
 }
+
+// uploadArchives from https://github.com/chrisbanes/gradle-mvn-push
+apply from: '../gradle-mvn-push.gradle'
