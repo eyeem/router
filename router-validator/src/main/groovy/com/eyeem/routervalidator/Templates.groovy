@@ -1,17 +1,7 @@
 package com.eyeem.routervalidator
 
 class Templates {
-
-    static final String SIMPLE = '''\
-package $packageName;
-
-public final class $className {
-
-<% access.paths.eachWithIndex { item, index -> %>\\
-    public static final String PATH_$index = "$item";
-<% } %>\\
-
-}
-'''
-
+    static String load(ClassLoader classLoader, String filename) {
+        classLoader.getResourceAsStream("templates/${filename}").text;
+    }
 }
