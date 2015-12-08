@@ -25,7 +25,7 @@ class RouterNode {
 
         otherClasses.add detuple(values?.request?.pagination)
         otherClasses.add detuple(values?.request?.declutter)
-        otherClasses = otherClasses.findAll{ it != null }.collect{ it + ".class"}
+        otherClasses = otherClasses.findAll{ it != null }.collect{ classify(null, it) + ".class"}
 
         scanForResources(resources, values)
 
@@ -43,7 +43,7 @@ class RouterNode {
     }
 
     static String classify(String packageName, String className) {
-        if (className.startsWith(".")) {
+        if (packageName != null && className.startsWith(".")) {
             return packageName + className;
         } else if (className.contains(".")) {
             return className.replaceAll("\\\$", ".");

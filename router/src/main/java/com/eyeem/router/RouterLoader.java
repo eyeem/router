@@ -198,7 +198,7 @@ public class RouterLoader {
 
    public static int getResIDByName(Context context, String typeName) {
       String[] a = typeName.split("\\.");
-      return getResIDByName(context, a[0], a[1]);
+      return getResIDByName(context, a[1], a[2]);
    }
 
    public static int getResIDByName(Context context, String type, String name) {
