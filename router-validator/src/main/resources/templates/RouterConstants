@@ -1,5 +1,6 @@
 package $packageName;
 
+import java.util.Locale;
 import ${data.resourcePackageName}.R;
 
 public final class $className {
@@ -8,7 +9,7 @@ public final class $className {
 
     // region ${node.type}
 
-    public static final String PATH_${node.type.toUpperCase()} = "${node.path}";
+    ${node.path()}
     public static final String TYPE_${node.type.toUpperCase()} = "${node.type}";
 
     <% if (node.decorators.size()) { %>
@@ -23,7 +24,6 @@ public final class $className {
     <% if (node.otherClasses.size()) { %>
     public static final Class[] OTHER_CLASSES_${node.type.toUpperCase()} = { ${node.otherClasses()} };
     <% } %>
-
     // endregion
 
 <% } %>

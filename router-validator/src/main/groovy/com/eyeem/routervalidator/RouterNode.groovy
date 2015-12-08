@@ -72,6 +72,71 @@ class RouterNode {
         items.collect{it + ".class"}.join(", ")
     }
 
+    String path() {
+        // public static final String PATH_${node.type.toUpperCase()} = "${node.path}";
+
+        String routerUrl = cleanUrl(path);
+        String[] routerParts = routerUrl.split("/");
+
+        PathMethod method = urlToPathMethod(routerParts)
+        method.type = type;
+        method.print();
+    }
+
+    static String cleanUrl(String url) {
+        if (url.startsWith("/")) {
+            return url.substring(1, url.length());
+        }
+        return url;
+    }
+
+    static class PathMethod {
+        String type
+        ArrayList<String> segments = new ArrayList<>()
+        ArrayList<String> params = new ArrayList<>()
+
+        String print() {
+            boolean isConstant = params.size() == 0;
+
+            StringBuilder sb = new StringBuilder(isConstant ? "public final static" : "public static")
+                .append(" String PATH_")
+                .append(type.toUpperCase())
+            if (isConstant) { // simple path
+                sb.append(" = \"" + path() + "\";")
+            } else {
+                sb
+                    .append("(").append(params.collect{"String " +it}.join(", ")).append(") { ")
+                    .append("return String.format(Locale.US, ")
+                    .append("\"").append(path()).append("\"").append(", ")
+                    .append(params.join(", "))
+                    .append(");")
+                    .append(" }")
+
+            }
+        }
+
+        String path() {
+            segments.join("/")
+        }
+    }
+
+    static PathMethod urlToPathMethod(String[] routerParts) {
+        PathMethod pathMethod = new PathMethod();
+        for (int index = 0; index < routerParts.length; index++) {
+            String routerPart = routerParts[index];
+
+            if (routerPart.charAt(0) == ':') {
+                String key = routerPart.substring(1, routerPart.length());
+                pathMethod.params.add(key);
+                pathMethod.segments.add("%" + (pathMethod.params.size()) + "\$s")
+            } else {
+                pathMethod.segments.add(routerPart)
+            }
+        }
+
+        return pathMethod;
+    }
+
     static void scanForResources(ArrayList<String> resources, Object object) {
         if (object instanceof ArrayList) {
             ArrayList array = object
