@@ -17,8 +17,6 @@ android {
         }
     }
 
-    useLibrary 'org.apache.http.legacy' // FIXME remove apache dependency
-
     lintOptions {
         abortOnError false
     }

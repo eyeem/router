@@ -28,15 +28,11 @@ package com.eyeem.router;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-
 import java.io.Serializable;
-import java.net.URI;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -285,7 +281,7 @@ public class Router {
    private RouterParams paramsForUrl(String url) {
       final String cleanedUrl = cleanUrl(url);
 
-      URI parsedUri = URI.create("http://tempuri.org/" + cleanedUrl);
+      Uri parsedUri = Uri.parse("http://tempuri.org/" + cleanedUrl);
 
       String urlPath = parsedUri.getPath().substring(1);
 
@@ -320,10 +316,9 @@ public class Router {
          throw new RouteNotFoundException("No route found for url " + url);
       }
 
-      List<NameValuePair> query = URLEncodedUtils.parse(parsedUri, "utf-8");
-
-      for (NameValuePair pair : query) {
-         routerParams.openParams.put(pair.getName(), pair.getValue());
+      for (String parameterName : parsedUri.getQueryParameterNames()) {
+         String parameterValue = parsedUri.getQueryParameter(parameterName);
+         routerParams.openParams.put(parameterName, parameterValue);
       }
 
       this._cachedRoutes.put(cleanedUrl, routerParams);
