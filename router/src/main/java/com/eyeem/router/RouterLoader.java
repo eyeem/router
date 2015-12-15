@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingFormatArgumentException;
 
 /**
  * This will load whole configuration from the YAML file
@@ -163,7 +164,14 @@ public class RouterLoader {
             ++currentPos;
          }
       }
-      return String.format(Locale.US, convFormat.toString(), valueList.toArray());
+
+      try {
+         return String.format(Locale.US, convFormat.toString(), valueList.toArray());
+      } catch (MissingFormatArgumentException mfae) {
+         // the argument was not provided thus formatting was impossible
+         // don't crash, return null instead, let upper layer decide how to handle
+         return null;
+      }
    }
 
    static Serializable copy(Serializable original) {
