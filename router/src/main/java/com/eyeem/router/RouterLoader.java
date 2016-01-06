@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -46,11 +44,8 @@ public class RouterLoader {
       return this;
    }
 
-   public Router load(String yamlConfig) {
+   public Router load(Map<String, Object> routerMap) {
       Router r = new Router(context);
-
-      Yaml yaml = new Yaml();
-      Map<String, Object> routerMap = (Map<String, Object>) yaml.load(yamlConfig);
 
       for (Map.Entry<String, Object> entry : routerMap.entrySet()) {
          r.map(entry.getKey(), new PluggableBuilder((Serializable) entry.getValue(), plugins));
