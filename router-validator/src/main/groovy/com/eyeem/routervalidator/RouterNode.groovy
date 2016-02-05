@@ -1,3 +1,5 @@
+package com.eyeem.routervalidator
+
 class RouterNode {
 
     // input values

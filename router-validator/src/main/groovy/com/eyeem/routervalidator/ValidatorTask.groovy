@@ -35,13 +35,15 @@ class ValidatorTask extends DefaultTask {
         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlString);
 
         routerMap.each {
-            key, value -> nodes.add(new RouterNode(
-                    path : key,
-                    type : value.type,
-                    decoratorsPackageName : decoratorsPackageName,
-                    holdersPackageName : holdersPackageName,
-                    values : value
-            ).parse());
+            key, value -> if (value.type != null) {
+                nodes.add(new RouterNode(
+                        path: key,
+                        type: value.type,
+                        decoratorsPackageName: decoratorsPackageName,
+                        holdersPackageName: holdersPackageName,
+                        values: value
+                ).parse());
+            }
         }
 
         def templateData = [
