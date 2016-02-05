@@ -74,8 +74,14 @@ public class RouterLoader {
                Log.d(PluggableBuilder.class.getSimpleName(), "failed to find plugin for: " + param.getKey());
                continue;
             } else {
-               format(param.getValue(), context);
-               plugin.bundleFor(context, param.getValue(), b);
+               Object paramValue = param.getValue();
+               if (paramValue instanceof String) { // because strings are immutable
+                  String formatedParamValue = format((String)paramValue, context._params);
+                  plugin.bundleFor(context, formatedParamValue, b);
+               } else {
+                  format(param.getValue(), context);
+                  plugin.bundleFor(context, param.getValue(), b);
+               }
             }
          }
          return b;
