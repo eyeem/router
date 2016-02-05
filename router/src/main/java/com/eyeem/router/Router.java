@@ -74,11 +74,13 @@ public class Router {
       Map<String, String> _params;
       Bundle _extras;
       Context _context;
+      String _url;
 
-      public RouteContext(Map<String, String> params, Bundle extras, Context context) {
+      public RouteContext(Map<String, String> params, Bundle extras, Context context, String url) {
          _params = params;
          _extras = extras;
          _context = context;
+         _url = url;
       }
 
       /**
@@ -100,6 +102,13 @@ public class Router {
        */
       public Context getContext() {
          return _context;
+      }
+
+      /**
+       * Returns the url that is being resolved by the router
+       */
+      public String url() {
+         return _url;
       }
    }
 
@@ -266,7 +275,7 @@ public class Router {
             }
          }
 
-         RouteContext routeContext = new RouteContext(openParams, extras, context);
+         RouteContext routeContext = new RouteContext(openParams, extras, context, url);
 
          return options.getBundleBuilder().bundleFor(routeContext);
       }
