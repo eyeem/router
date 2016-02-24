@@ -46,7 +46,7 @@ class RouterNode {
 
     static String classify(String packageName, String className) {
         if (packageName != null && className.startsWith(".")) {
-            return packageName + className;
+            return packageName + className.replaceAll("\\\$", ".");
         } else if (className.contains(".")) {
             return className.replaceAll("\\\$", ".");
         } else {
