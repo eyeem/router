@@ -47,11 +47,15 @@ public class RouterLoader {
    public Router load(Map<String, Object> routerMap) {
       Router r = new Router(context);
 
+      loadInto(routerMap, r);
+
+      return r;
+   }
+
+   public void loadInto(Map<String, Object> routerMap, Router r) {
       for (Map.Entry<String, Object> entry : routerMap.entrySet()) {
          r.map(entry.getKey(), new PluggableBuilder((Serializable) entry.getValue(), plugins));
       }
-
-      return r;
    }
 
    public static class PluggableBuilder extends Router.BundleBuilder {
