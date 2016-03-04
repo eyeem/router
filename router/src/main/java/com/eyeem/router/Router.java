@@ -398,4 +398,8 @@ public class Router {
          super(message);
       }
    }
+
+   public void clearCache() {
+      _cachedRoutes.clear();
+   }
 }
