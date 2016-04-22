@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingFormatArgumentException;
+import java.util.UnknownFormatConversionException;
 
 /**
  * This will load whole configuration from the YAML file
@@ -172,9 +173,10 @@ public class RouterLoader {
 
       try {
          return String.format(Locale.US, convFormat.toString(), valueList.toArray());
-      } catch (MissingFormatArgumentException mfae) {
+      } catch (MissingFormatArgumentException | UnknownFormatConversionException e) {
          // the argument was not provided thus formatting was impossible
          // don't crash, return null instead, let upper layer decide how to handle
+         // Android N will return UnknownFormatConversionException
          return null;
       }
    }
