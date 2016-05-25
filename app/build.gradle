@@ -11,17 +11,18 @@ buildscript {
 //        }
     }
     dependencies {
-        classpath 'com.eyeem.router:router-validator:0.0.1-SNAPSHOT'
+        classpath 'com.eyeem.router:router-validator:0.0.4-SNAPSHOT'
         // these are required for local builds
 //        classpath 'org.yaml:snakeyaml:1.8'
     }
 }
 
+apply plugin: 'com.android.application'
 apply plugin: 'com.eyeem.routervalidator'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.eyeem.samplenav"
@@ -43,17 +44,17 @@ android {
 
 router {
     path = "app/src/main/assets/map.yaml"
-    packageName = "com.eyeem.router"
-    decoratorsPackageName = "com.baseapp.eyeem.fragment.decorator"
-    holdersPackageName = "com.eyeem.holders"
-    resourcePackageName = "com.baseapp.eyeem"
+    packageName = "com.eyeem.samplenav.router"
+    decoratorsPackageName = "com.eyeem.samplenav"
+    holdersPackageName = "com.eyeem.samplenav"
+    resourcePackageName = "com.eyeem.samplenav"
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'org.yaml:snakeyaml:1.8'
-    compile 'com.eyeem.router:router:0.0.1-SNAPSHOT'
+    compile 'com.eyeem.router:router:0.0.4-SNAPSHOT'
 }

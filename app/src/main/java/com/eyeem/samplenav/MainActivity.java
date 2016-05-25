@@ -13,6 +13,10 @@ import android.view.MenuItem;
 import com.eyeem.router.Router;
 import com.eyeem.router.RouterLoader;
 
+import org.yaml.snakeyaml.Yaml;
+
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
    @Override
@@ -22,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
 
-      com.eyeem.router.RouterConstants rc = new com.eyeem.router.RouterConstants();
+      //com.eyeem.router.RouterConstants rc = new com.eyeem.router.RouterConstants();
 
       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
       fab.setOnClickListener(new View.OnClickListener() {
@@ -58,11 +62,16 @@ public class MainActivity extends AppCompatActivity {
 
    public static View.OnClickListener test = new View.OnClickListener() {
       @Override public void onClick(View v) {
+
+         String yamlStr = Assets._from(v.getContext(), "map.yaml");
+
+         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlStr);
+
          Router r = RouterLoader
             .with(v.getContext())
             .plugin(new RequestPlugin())
             .plugin(new DecoratorsPlugin())
-            .load(Assets._from(v.getContext(), "map.yaml"));
+            .load(routerMap);
 
          String id = "me";
 
