@@ -31,9 +31,12 @@ package com.eyeem.router;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -307,12 +310,20 @@ public class Router {
          RouterOptions routerOptions = entry.getValue();
          String[] routerParts = routerUrl.split("/");
 
-         // FIXME this might be wildcard
-         if (routerParts.length != givenParts.length) {
+         boolean isWildcard = false;
+         for (int i = 0; !isWildcard && i < routerParts.length; i++) {
+            String routerPart = routerParts[i];
+            isWildcard = routerPart != null
+               && routerPart.length() > 2
+               && routerPart.charAt(0) == ':'
+               && routerPart.charAt(routerPart.length() - 1) == ':';
+         }
+
+         if (!isWildcard && (routerParts.length != givenParts.length)) {
             continue;
          }
 
-         Map<String, String> givenParams = urlToParamsMap(givenParts, routerParts);
+         Map<String, String> givenParams = urlToParamsMap(givenParts, routerParts, isWildcard);
          if (givenParams == null) {
             continue;
          }
@@ -339,31 +350,78 @@ public class Router {
    /**
     * @param givenUrlSegments  An array representing the URL path attempting to be opened (i.e. ["users", "42"])
     * @param routerUrlSegments An array representing a possible URL match for the router (i.e. ["users", ":id"])
+    * @param hasWildcard       Tells whether there is a :wildcard: param or not
     * @return A map of URL parameters if it's a match (i.e. {"id" => "42"}) or null if there is no match
     */
-   private Map<String, String> urlToParamsMap(String[] givenUrlSegments, String[] routerUrlSegments) {
+   private Map<String, String> urlToParamsMap(String[] givenUrlSegments, String[] routerUrlSegments, boolean hasWildcard) {
       Map<String, String> formatParams = new HashMap<>();
-      for (int index = 0; index < routerUrlSegments.length; index++) {
-         String routerPart = routerUrlSegments[index];
-         String givenPart = givenUrlSegments[index];
+      for (
+         int routerIndex = 0, givenIndex = 0;
+         routerIndex < routerUrlSegments.length && givenIndex < givenUrlSegments.length;
+         routerIndex++
+         ) {
+         String routerPart = routerUrlSegments[routerIndex];
+         String givenPart = givenUrlSegments[givenIndex];
 
          if (routerPart.charAt(0) == ':') {
             String key = routerPart.substring(1, routerPart.length());
-            formatParams.put(key, givenPart);
-            continue;
-         }
 
-         boolean isWildcard = false;
-         if (routerPart.charAt(routerPart.length() - 1) == ':') {
-            String key = routerPart.substring(0, routerPart.length() - 1);
-            formatParams.put(key, givenPart);
-            isWildcard = true;
+            // (1) region standard router behavior
+            if (!hasWildcard) {
+               formatParams.put(key, givenPart);
+               givenIndex++;
+               continue;
+            }
+            // endregion
+
+            // region wildcard
+
+            // (2) first we check if param is indeed a wildcard param
+            boolean isWildcard = false;
+            if (key.charAt(key.length() - 1) == ':') {
+               key = key.substring(0, key.length() - 1);
+               isWildcard = true;
+            }
+
+            // (3) if it's not, just do standard processing --> (1)
+            if (!isWildcard) {
+               formatParams.put(key, givenPart);
+               givenIndex++;
+               continue;
+            }
+
+            // (4) check remaining segments before consuming wildcard parameter
+            String nextRouterPart = routerIndex + 1 < routerUrlSegments.length ? routerUrlSegments[routerIndex + 1] : null;
+
+            // we need to eat everything up till next recognizable path
+            // e.g. :whatever:/:id should be forbidden thus the following check
+            if (!TextUtils.isEmpty(nextRouterPart) && nextRouterPart.charAt(0) == ':') {
+               throw new IllegalStateException(
+                  String.format(Locale.US, "Wildcard parameter %1$s cannot be directly followed by a parameter %2$s", routerPart, nextRouterPart));
+            }
+
+            // (5) all is good, it's time to eat some segments
+            ArrayList<String> segments = new ArrayList<>();
+            for (int i = givenIndex; i < givenUrlSegments.length; i++) {
+               String tmpPart = givenUrlSegments[i];
+               if (tmpPart.equals(nextRouterPart)) {
+                  break;
+               } else {
+                  segments.add(tmpPart);
+               }
+            }
+
+            // (6) put it all assembled as a wildcard param
+            formatParams.put(key, TextUtils.join("/", segments));
+            givenIndex += segments.size();
             continue;
+            // endregion
          }
 
          if (!routerPart.equals(givenPart)) {
             return null;
          }
+         givenIndex++; // casual increment
       }
 
       return formatParams;

@@ -5,7 +5,7 @@
 'item/:id' :
   type: 'item_id'
   decorators : {}
-'item/:id/:whatever:' :
+'item/:id/:whatever:/custom/:something/:whatever2:' :
   type: 'item_id_whatever'
   decorators :
     - WhateverDecorator

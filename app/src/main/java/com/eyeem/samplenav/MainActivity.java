@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
          String id = "me";
 
-         Bundle bundle = r.bundleFor("u/"+id+"?isNotSelf=true");
+         Bundle bundle = r.bundleFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
 
 
       }
