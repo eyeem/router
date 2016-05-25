@@ -2,8 +2,9 @@ package com.eyeem.router;
 
 /*
     Routable for Android
-    Copyright (c) 2013 Turboprop, Inc. <clay@usepropeller.com>
-    http://usepropeller.com
+
+    Copyright (c) 2013 Turboprop, Inc. <clay@usepropeller.com> http://usepropeller.com
+    Copyright (c) 2016 EyeEm Mobile GmbH
 
     Licensed under the MIT License.
 
@@ -306,6 +307,7 @@ public class Router {
          RouterOptions routerOptions = entry.getValue();
          String[] routerParts = routerUrl.split("/");
 
+         // FIXME this might be wildcard
          if (routerParts.length != givenParts.length) {
             continue;
          }
@@ -340,7 +342,7 @@ public class Router {
     * @return A map of URL parameters if it's a match (i.e. {"id" => "42"}) or null if there is no match
     */
    private Map<String, String> urlToParamsMap(String[] givenUrlSegments, String[] routerUrlSegments) {
-      Map<String, String> formatParams = new HashMap<String, String>();
+      Map<String, String> formatParams = new HashMap<>();
       for (int index = 0; index < routerUrlSegments.length; index++) {
          String routerPart = routerUrlSegments[index];
          String givenPart = givenUrlSegments[index];
@@ -348,6 +350,14 @@ public class Router {
          if (routerPart.charAt(0) == ':') {
             String key = routerPart.substring(1, routerPart.length());
             formatParams.put(key, givenPart);
+            continue;
+         }
+
+         boolean isWildcard = false;
+         if (routerPart.charAt(routerPart.length() - 1) == ':') {
+            String key = routerPart.substring(0, routerPart.length() - 1);
+            formatParams.put(key, givenPart);
+            isWildcard = true;
             continue;
          }
 

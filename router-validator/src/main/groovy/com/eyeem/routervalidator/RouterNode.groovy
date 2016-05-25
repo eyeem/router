@@ -129,6 +129,12 @@ class RouterNode {
 
             if (routerPart.charAt(0) == ':') {
                 String key = routerPart.substring(1, routerPart.length());
+
+                // handle :whatever: param
+                if (key.charAt(key.length()-1) == ':') {
+                    key = key.substring(0, key.length()-1);
+                }
+
                 pathMethod.params.add(key);
                 pathMethod.segments.add("%" + (pathMethod.params.size()) + "\$s")
             } else {

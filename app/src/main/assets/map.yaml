@@ -1,12 +1,11 @@
 ---
 'home' :
-  type: 'f4'
+  type: 'home'
   decorators: {}
-'discover' :
-  request :
-    path : '/v2/discover/batch'
-    jsonpath : 'discover.items'
-    defaults : false
-  type : 'discover'
+'item/:id' :
+  type: 'item_id'
   decorators : {}
-  holders : {}
+'item/:id/:whatever:' :
+  type: 'item_id_whatever'
+  decorators :
+    - WhateverDecorator
