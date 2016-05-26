@@ -23,4 +23,36 @@ public class RouterUtils {
          return null;
       }
    }
+
+   /**
+    * Check if given router url format is a :wildcard: format
+    * @param format
+    * @return true if format is a wildcard containing format
+    */
+   public static boolean isWildcard(String format) {
+      String routerUrl = cleanUrl(format);
+      String[] routerParts = routerUrl.split("/");
+
+      for (String routerPart : routerParts) {
+         if (routerPart.length() > 2
+            && routerPart.charAt(0) == ':'
+            && routerPart.charAt(routerPart.length() - 1) == ':') {
+            return true;
+         }
+      }
+      return false;
+   }
+
+   /**
+    * Clean up url
+    *
+    * @param url
+    * @return cleaned url
+    */
+   public static String cleanUrl(String url) {
+      if (url.startsWith("/")) {
+         return url.substring(1, url.length());
+      }
+      return url;
+   }
 }

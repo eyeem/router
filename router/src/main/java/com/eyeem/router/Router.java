@@ -39,27 +39,22 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import static com.eyeem.router.RouterUtils.cleanUrl;
+import static com.eyeem.router.RouterUtils.isWildcard;
 
 public class Router {
 
    public final static String ROUTER_SERVICE = Router.class.getCanonicalName();
-
-   private static final Router _router = new Router();
 
    /**
     * Default params shared across all router paths
     */
    private HashMap<String, Object> globalParams = new HashMap<>();
 
-   /**
-    * A globally accessible Router instance that will work for
-    * most use cases.
-    */
-   public static Router sharedRouter() {
-      return _router;
-   }
-
    public static Router from(Context context) {
+      //noinspection WrongConstant
       return (Router) context.getSystemService(ROUTER_SERVICE);
    }
 
@@ -153,7 +148,8 @@ public class Router {
       public Map<String, String> openParams;
    }
 
-   private final Map<String, RouterOptions> _routes = new HashMap<String, RouterOptions>();
+   private final Map<String, RouterOptions> _routes = new HashMap<>();
+   private final Map<String, RouterOptions> _wildcardRoutes = new HashMap<>();
    private String _rootUrl = null;
    private final Map<String, RouterParams> _cachedRoutes = new HashMap<String, RouterParams>();
    private Context _context;
@@ -210,7 +206,12 @@ public class Router {
       if (options == null) {
          options = new RouterOptions();
       }
-      this._routes.put(format, options);
+
+      if (isWildcard(format)) {
+         this._wildcardRoutes.put(format, options);
+      } else {
+         this._routes.put(format, options);
+      }
    }
 
    /**
@@ -304,20 +305,35 @@ public class Router {
 
       String[] givenParts = urlPath.split("/");
 
+      // first check for matching non wildcard routes just to avoid being shadowed
+      // by more generic wildcard routes
+      RouterParams routerParams = checkRouteSet(this._routes.entrySet(), givenParts, false);
+
+      // still null, try matching to any wildcard routes
+      if (routerParams == null) {
+         routerParams = checkRouteSet(this._wildcardRoutes.entrySet(), givenParts, true);
+      }
+
+      if (routerParams == null) {
+         throw new RouteNotFoundException("No route found for url " + url);
+      }
+
+      for (String parameterName : parsedUri.getQueryParameterNames()) {
+         String parameterValue = parsedUri.getQueryParameter(parameterName);
+         routerParams.openParams.put(parameterName, parameterValue);
+      }
+
+      this._cachedRoutes.put(cleanedUrl, routerParams);
+      return routerParams;
+   }
+
+   private static RouterParams checkRouteSet(Set<Entry<String, RouterOptions>> routeSet, String[] givenParts, boolean isWildcard) {
       RouterParams routerParams = null;
-      for (Entry<String, RouterOptions> entry : this._routes.entrySet()) {
+
+      for (Entry<String, RouterOptions> entry : routeSet) {
          String routerUrl = cleanUrl(entry.getKey());
          RouterOptions routerOptions = entry.getValue();
          String[] routerParts = routerUrl.split("/");
-
-         boolean isWildcard = false;
-         for (int i = 0; !isWildcard && i < routerParts.length; i++) {
-            String routerPart = routerParts[i];
-            isWildcard = routerPart != null
-               && routerPart.length() > 2
-               && routerPart.charAt(0) == ':'
-               && routerPart.charAt(routerPart.length() - 1) == ':';
-         }
 
          if (!isWildcard && (routerParts.length != givenParts.length)) {
             continue;
@@ -334,16 +350,6 @@ public class Router {
          break;
       }
 
-      if (routerParams == null) {
-         throw new RouteNotFoundException("No route found for url " + url);
-      }
-
-      for (String parameterName : parsedUri.getQueryParameterNames()) {
-         String parameterValue = parsedUri.getQueryParameter(parameterName);
-         routerParams.openParams.put(parameterName, parameterValue);
-      }
-
-      this._cachedRoutes.put(cleanedUrl, routerParams);
       return routerParams;
    }
 
@@ -353,7 +359,7 @@ public class Router {
     * @param hasWildcard       Tells whether there is a :wildcard: param or not
     * @return A map of URL parameters if it's a match (i.e. {"id" => "42"}) or null if there is no match
     */
-   private Map<String, String> urlToParamsMap(String[] givenUrlSegments, String[] routerUrlSegments, boolean hasWildcard) {
+   private static Map<String, String> urlToParamsMap(String[] givenUrlSegments, String[] routerUrlSegments, boolean hasWildcard) {
       Map<String, String> formatParams = new HashMap<>();
       for (
          int routerIndex = 0, givenIndex = 0;
@@ -432,18 +438,7 @@ public class Router {
       return this;
    }
 
-   /**
-    * Clean up url
-    *
-    * @param url
-    * @return cleaned url
-    */
-   private String cleanUrl(String url) {
-      if (url.startsWith("/")) {
-         return url.substring(1, url.length());
-      }
-      return url;
-   }
+
 
    /**
     * Thrown if a given route is not found.
