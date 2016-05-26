@@ -36,6 +36,7 @@ import android.text.TextUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -148,10 +149,10 @@ public class Router {
       public Map<String, String> openParams;
    }
 
-   private final Map<String, RouterOptions> _routes = new HashMap<>();
-   private final Map<String, RouterOptions> _wildcardRoutes = new HashMap<>();
+   private final Map<String, RouterOptions> _routes = new LinkedHashMap<>();
+   private final Map<String, RouterOptions> _wildcardRoutes = new LinkedHashMap<>();
    private String _rootUrl = null;
-   private final Map<String, RouterParams> _cachedRoutes = new HashMap<String, RouterParams>();
+   private final Map<String, RouterParams> _cachedRoutes = new HashMap<>();
    private Context _context;
 
    /**
