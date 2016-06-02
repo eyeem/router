@@ -29,15 +29,12 @@ public class RouterLoader {
    public final static String VARIABLE_PREFIX = "%{";
    public final static String VARIABLE_SUFFIX = "}";
 
-   private Context context;
    private HashMap<String, Plugin> plugins = new HashMap<>();
 
    private RouterLoader() {}
 
-   public static RouterLoader with(Context context) {
-      RouterLoader routerLoader = new RouterLoader();
-      routerLoader.context = context;
-      return routerLoader;
+   public static RouterLoader prepare() {
+      return new RouterLoader();
    }
 
    public RouterLoader plugin(Plugin plugin) {
@@ -46,7 +43,7 @@ public class RouterLoader {
    }
 
    public Router load(Map<String, Object> routerMap) {
-      Router r = new Router(context);
+      Router r = new Router();
 
       loadInto(routerMap, r);
 
@@ -59,7 +56,7 @@ public class RouterLoader {
       }
    }
 
-   public static class PluggableBuilder extends Router.BundleBuilder {
+   public static class PluggableBuilder extends Router.OutputBuilder<Bundle, Bundle> {
 
       Map<String, Object> params;
       HashMap<String, Plugin> plugins;
@@ -69,7 +66,7 @@ public class RouterLoader {
          this.plugins = plugins;
       }
 
-      @Override public Bundle bundleFor(Router.RouteContext context) {
+      @Override public Bundle outputFor(Router.RouteContext context) {
          Bundle b = new Bundle();
          HashMap<String, Object> params = (HashMap<String, Object>)copy((Serializable) this.params);
 
