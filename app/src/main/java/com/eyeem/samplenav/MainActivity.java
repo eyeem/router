@@ -68,14 +68,14 @@ public class MainActivity extends AppCompatActivity {
          Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlStr);
 
          Router r = RouterLoader
-            .with(v.getContext())
+            .prepare()
             .plugin(new RequestPlugin())
             .plugin(new DecoratorsPlugin())
             .load(routerMap);
 
          String id = "me";
 
-         Bundle bundle = r.bundleFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
+         Bundle bundle = r.outputFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
 
 
       }
