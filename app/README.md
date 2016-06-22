@@ -1,6 +1,6 @@
 # Nano Router
 
-Combines NanoHTTPD and Router together to monitor traffic.
+Combines NanoHTTPD and Router together to serve content & monitor traffic.
 
 ## Port forwarding
 

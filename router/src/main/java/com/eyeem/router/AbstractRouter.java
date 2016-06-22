@@ -212,7 +212,7 @@ public abstract class AbstractRouter<O,P> {
       RouterOptions<O, P> options = params.routerOptions;
       if (options.getOutputBuilder() != null) {
 
-         Map openParams = (Map)RouterLoader.copy((Serializable) params.openParams);
+         Map openParams = (Map) AbstractRouterLoader.copy((Serializable) params.openParams);
 
          // add global params to path specific params
          for (Entry<String, Object> entry : globalParams.entrySet()) {

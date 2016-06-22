@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.eyeem.router.AbstractRouterLoader;
+import com.eyeem.router.Plugin;
 import com.eyeem.router.Router;
 import com.eyeem.router.RouterLoader;
 
@@ -97,18 +99,18 @@ public class MainActivity extends AppCompatActivity {
       }
    };
 
-   public static class DecoratorsPlugin extends RouterLoader.Plugin {
+   public static class DecoratorsPlugin extends Plugin<Bundle, Bundle> {
       public DecoratorsPlugin() { super("decorators"); }
 
-      @Override public void bundleFor(Router.RouteContext context, Object config, Bundle bundle) {
+      @Override public void outputFor(Router.RouteContext context, Object config, Bundle bundle) {
          Log.d(DecoratorsPlugin.class.getSimpleName(), config.toString());
       }
    }
 
-   public static class RequestPlugin extends RouterLoader.Plugin {
+   public static class RequestPlugin extends Plugin<Bundle, Bundle> {
       public RequestPlugin() { super("request"); }
 
-      @Override public void bundleFor(Router.RouteContext context, Object config, Bundle bundle) {
+      @Override public void outputFor(Router.RouteContext context, Object config, Bundle bundle) {
          Log.d(RequestPlugin.class.getSimpleName(), config.toString());
       }
    }
