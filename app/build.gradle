@@ -57,5 +57,6 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'org.yaml:snakeyaml:1.8'
     //compile 'com.eyeem.router:router:0.0.5-SNAPSHOT'
+    compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
     compile project(':router')
 }
