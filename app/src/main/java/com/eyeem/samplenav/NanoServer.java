@@ -1,5 +1,9 @@
 package com.eyeem.samplenav;
 
+import com.eyeem.samplenav.plugins.HtmlPlugin;
+
+import java.util.Map;
+
 import fi.iki.elonen.NanoHTTPD;
 
 /**
@@ -7,19 +11,31 @@ import fi.iki.elonen.NanoHTTPD;
  */
 public class NanoServer extends NanoHTTPD {
 
-   private final static int PORT = 8080;
    private NanoRouter router;
 
-   public NanoServer() {
-      super(PORT);
-      router = new NanoRouter();
+   public NanoServer(int port, Map<String, Object> routing) {
+      super(port);
+      router = NanoRouter.prepare()
+         .plugin(new HtmlPlugin("html"))
+         .load(routing);
    }
 
    @Override public Response serve(IHTTPSession session) {
-      return router.outputFor(session.getUri(), session);
-//      String msg = "<html><body><h1>Hello server</h1>\n";
-//      msg += "<p>We serve " + session.getUri() + " !</p>";
-//      msg +=  "</body></html>\n";
-//      return new Response(msg);
+      try {
+         return router.outputFor(session.getUri(), session).build();
+      } catch (Exception e) {
+         return new Response(stackTraceToHtml(e));
+      }
+   }
+
+   public String stackTraceToHtml(Throwable e) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("<html><body>");
+      for (StackTraceElement element : e.getStackTrace()) {
+         sb.append(element.toString());
+         sb.append("<br>");
+      }
+      sb.append("</html></body>");
+      return sb.toString();
    }
 }

@@ -6,6 +6,10 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import org.yaml.snakeyaml.Yaml;
+
+import java.util.Map;
+
 /**
  * Created by vishna on 22/06/16.
  */
@@ -29,7 +33,9 @@ public class NanoService extends Service {
 
    @Override
    public void onCreate() {
-      server = new NanoServer();
+      String yamlStr = Assets._from(this, "server.yaml");
+      Map<String, Object> routing = (Map<String, Object>) new Yaml().load(yamlStr);
+      server = new NanoServer(8080, routing);
    }
 
    @Override

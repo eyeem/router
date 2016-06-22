@@ -1,0 +1,10 @@
+---
+'' :
+  html :
+    title : Welcome to the main page!
+'user/:id' :
+  html :
+    title : 'This is a page for %{id}!'
+':whatever:' :
+  html:
+    title : This is Whatever Page!

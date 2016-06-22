@@ -310,7 +310,7 @@ public abstract class AbstractRouter<O,P> {
          String routerPart = routerUrlSegments[routerIndex];
          String givenPart = givenUrlSegments[givenIndex];
 
-         if (routerPart.charAt(0) == ':') {
+         if (routerPart.length() > 0 && routerPart.charAt(0) == ':') {
             String key = routerPart.substring(1, routerPart.length());
 
             // (1) region standard router behavior

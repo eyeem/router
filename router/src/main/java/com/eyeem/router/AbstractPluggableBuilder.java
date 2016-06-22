@@ -16,7 +16,7 @@ public abstract class AbstractPluggableBuilder<O, P> extends AbstractRouter.Outp
    Map<String, Object> params;
    HashMap<String, Plugin<O, P>> plugins;
 
-   AbstractPluggableBuilder(Serializable params, HashMap<String, Plugin<O, P>> plugins) {
+   public AbstractPluggableBuilder(Serializable params, HashMap<String, Plugin<O, P>> plugins) {
       this.params = params instanceof Map ? (Map<String, Object>) params : null;
       this.plugins = plugins;
    }
