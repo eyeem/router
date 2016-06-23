@@ -58,5 +58,6 @@ dependencies {
     compile 'org.yaml:snakeyaml:1.8'
     //compile 'com.eyeem.router:router:0.0.5-SNAPSHOT'
     compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
+    compile 'com.github.jknack:handlebars:4.0.5'
     compile project(':router')
 }
