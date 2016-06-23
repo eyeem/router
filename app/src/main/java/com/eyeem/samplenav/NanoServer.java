@@ -1,5 +1,6 @@
 package com.eyeem.samplenav;
 
+import com.eyeem.samplenav.plugins.FilePlugin;
 import com.eyeem.samplenav.plugins.HtmlPlugin;
 
 import java.util.Map;
@@ -16,7 +17,8 @@ public class NanoServer extends NanoHTTPD {
    public NanoServer(int port, Map<String, Object> routing) {
       super(port);
       router = NanoRouter.prepare()
-         .plugin(new HtmlPlugin("html"))
+         .plugin(new HtmlPlugin())
+         .plugin(new FilePlugin())
          .load(routing);
    }
 

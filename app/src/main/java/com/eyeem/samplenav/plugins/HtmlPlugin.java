@@ -17,22 +17,22 @@ import fi.iki.elonen.NanoHTTPD;
  * Created by vishna on 22/06/16.
  */
 public class HtmlPlugin extends NanoRouter.P {
-   public HtmlPlugin(String node) {
-      super(node);
+   public HtmlPlugin() {
+      super("html");
    }
 
    @Override public void outputFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, Response o) {
-//      final String url = context.url();
-//      final Map<String, Object> map;
-//      if (config instanceof Map) {
-//         map = (Map<String, Object>) config;
-//      } else {
-//         map = null;
-//      }
+      final String url = context.url();
+      final Map<String, Object> map;
+      if (config instanceof Map) {
+         map = (Map<String, Object>) config;
+      } else {
+         map = null;
+      }
 
       String msg = null;
       try {
-         String templateSource = Assets._from(App.the, "templates/main");
+         String templateSource = Assets._from(App.the, "templates/" + map.get("template"));
          Handlebars handlebars = new Handlebars();
          Template template = handlebars.compileInline(templateSource);
          msg = template.apply(config);

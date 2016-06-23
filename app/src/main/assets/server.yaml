@@ -1,13 +1,13 @@
 ---
 '' :
   html :
+    template : index.html
     title : Welcome to the main page!
     body : Hello world!
 'user/:id' :
   html :
+    template : index.html
     title : 'This is a page for %{id}!'
     body : Hello %{id}
-':whatever:' :
-  html:
-    title : This is Whatever Page!
-    body : Seems you are lost.
+'static/:whatever:' :
+  file : {}
