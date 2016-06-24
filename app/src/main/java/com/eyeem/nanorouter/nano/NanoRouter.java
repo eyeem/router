@@ -1,4 +1,4 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter.nano;
 
 import com.eyeem.router.AbstractPluggableBuilder;
 import com.eyeem.router.AbstractRouter;

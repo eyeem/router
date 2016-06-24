@@ -1,4 +1,4 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter;
 
 import android.app.Application;
 

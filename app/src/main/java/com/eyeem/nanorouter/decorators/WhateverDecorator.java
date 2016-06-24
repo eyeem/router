@@ -1,4 +1,4 @@
-package com.eyeem.samplenav.decorators;
+package com.eyeem.nanorouter.decorators;
 
 /**
  * Created by vishna on 25/05/16.

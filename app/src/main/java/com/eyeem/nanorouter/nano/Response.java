@@ -1,8 +1,9 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter.nano;
 
 import android.webkit.MimeTypeMap;
 
-import java.io.File;
+import com.eyeem.nanorouter.App;
+
 import java.io.IOException;
 import java.io.InputStream;
 

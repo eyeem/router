@@ -25,7 +25,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.eyeem.samplenav"
+        applicationId "com.eyeem.nanorouter"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -44,10 +44,10 @@ android {
 
 router {
     path = "app/src/main/assets/map.yaml"
-    packageName = "com.eyeem.samplenav.router"
-    decoratorsPackageName = "com.eyeem.samplenav.decorators"
-    holdersPackageName = "com.eyeem.samplenav"
-    resourcePackageName = "com.eyeem.samplenav"
+    packageName = "com.eyeem.nanorouter.router"
+    decoratorsPackageName = "com.eyeem.nanorouter.decorators"
+    holdersPackageName = "com.eyeem.nanorouter"
+    resourcePackageName = "com.eyeem.nanorouter"
 }
 
 dependencies {

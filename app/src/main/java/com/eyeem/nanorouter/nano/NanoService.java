@@ -1,10 +1,12 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter.nano;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.eyeem.nanorouter.Assets;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -26,7 +28,7 @@ public class NanoService extends Service {
     * IPC.
     */
    public class NanoBinder extends Binder {
-      NanoService getService() {
+      public NanoService getService() {
          return NanoService.this;
       }
    }

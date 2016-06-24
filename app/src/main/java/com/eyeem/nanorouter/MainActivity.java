@@ -1,4 +1,4 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,10 +16,10 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.eyeem.router.AbstractRouterLoader;
 import com.eyeem.router.Plugin;
 import com.eyeem.router.Router;
 import com.eyeem.router.RouterLoader;
+import com.eyeem.nanorouter.nano.NanoService;
 
 import org.yaml.snakeyaml.Yaml;
 

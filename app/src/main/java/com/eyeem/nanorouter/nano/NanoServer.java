@@ -1,7 +1,7 @@
-package com.eyeem.samplenav;
+package com.eyeem.nanorouter.nano;
 
-import com.eyeem.samplenav.plugins.FilePlugin;
-import com.eyeem.samplenav.plugins.HtmlPlugin;
+import com.eyeem.nanorouter.file.FilePlugin;
+import com.eyeem.nanorouter.html.HtmlPlugin;
 
 import java.util.Map;
 

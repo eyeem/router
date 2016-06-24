@@ -1,8 +1,8 @@
-package com.eyeem.samplenav.plugins;
+package com.eyeem.nanorouter.file;
 
 import com.eyeem.router.AbstractRouter;
-import com.eyeem.samplenav.NanoRouter;
-import com.eyeem.samplenav.Response;
+import com.eyeem.nanorouter.nano.NanoRouter;
+import com.eyeem.nanorouter.nano.Response;
 
 import java.util.Map;
 

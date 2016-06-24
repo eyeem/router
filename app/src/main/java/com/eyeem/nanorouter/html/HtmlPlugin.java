@@ -1,10 +1,10 @@
-package com.eyeem.samplenav.plugins;
+package com.eyeem.nanorouter.html;
 
 import com.eyeem.router.AbstractRouter;
-import com.eyeem.samplenav.App;
-import com.eyeem.samplenav.Assets;
-import com.eyeem.samplenav.NanoRouter;
-import com.eyeem.samplenav.Response;
+import com.eyeem.nanorouter.App;
+import com.eyeem.nanorouter.Assets;
+import com.eyeem.nanorouter.nano.NanoRouter;
+import com.eyeem.nanorouter.nano.Response;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 
