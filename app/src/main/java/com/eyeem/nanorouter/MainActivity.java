@@ -25,9 +25,10 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NanoService.Listener {
 
    CoordinatorLayout root;
+   FloatingActionButton fab;
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +40,15 @@ public class MainActivity extends AppCompatActivity {
       //com.eyeem.router.RouterConstants rc = new com.eyeem.router.RouterConstants();
       root = (CoordinatorLayout) findViewById(R.id.root);
 
-      FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+      fab = (FloatingActionButton) findViewById(R.id.fab);
       fab.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
-            nanoService.start();
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//               .setAction("Action", test).show();
+            if (nanoService.isStarted()) {
+               nanoService.stop();
+            } else {
+               nanoService.start();
+            }
          }
       });
 
@@ -99,6 +102,19 @@ public class MainActivity extends AppCompatActivity {
       }
    };
 
+   @Override protected void onResume() {
+      super.onResume();
+      if (nanoService != null) {
+         onStatusChanged(nanoService.isStarted());
+      }
+   }
+
+   @Override public void onStatusChanged(boolean isStarted) {
+      if (fab != null) {
+         fab.setImageResource(isStarted ? R.drawable.ic_pause_32dp : R.drawable.ic_play_arrow_32dp);
+      }
+   }
+
    public static class DecoratorsPlugin extends Plugin<Bundle, Bundle> {
       public DecoratorsPlugin() { super("decorators"); }
 
@@ -126,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
          // service that we know is running in our own process, we can
          // cast its IBinder to a concrete class and directly access it.
          nanoService = ((NanoService.NanoBinder)service).getService();
+         if (nanoService != null) {
+            nanoService.listeners.add(MainActivity.this);
+            onStatusChanged(nanoService.isStarted());
+         }
 
          // Tell the user about this for our demo.
          Snackbar.make(root, "Service connected", Snackbar.LENGTH_LONG);
@@ -136,7 +156,10 @@ public class MainActivity extends AppCompatActivity {
          // unexpectedly disconnected -- that is, its process crashed.
          // Because it is running in our same process, we should never
          // see this happen.
-         nanoService = null;
+         if (nanoService != null) {
+            nanoService.listeners.remove(MainActivity.this);
+            nanoService = null;
+         }
          Snackbar.make(root, "Service disconnected", Snackbar.LENGTH_LONG);
       }
    };
@@ -146,7 +169,9 @@ public class MainActivity extends AppCompatActivity {
       // class name because we want a specific service implementation that
       // we know will be running in our own process (and thus won't be
       // supporting component replacement by other applications).
+      if (isBound) return;
       bindService(new Intent(this, NanoService.class), nanoConnection, Context.BIND_AUTO_CREATE);
+
       isBound = true;
    }
 

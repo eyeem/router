@@ -10,6 +10,7 @@ import com.eyeem.nanorouter.Assets;
 
 import org.yaml.snakeyaml.Yaml;
 
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -21,6 +22,8 @@ public class NanoService extends Service {
 
    NanoServer server;
    boolean isStarted;
+
+   public boolean isStarted() { return isStarted; }
 
    /**
     * Class for clients to access.  Because we know this service always
@@ -54,6 +57,7 @@ public class NanoService extends Service {
       try {
          server.start();
          isStarted = true;
+         onStatusChanged();
       } catch (Throwable e) {
          Log.e(TAG, "failed to start server", e);
       }
@@ -67,6 +71,7 @@ public class NanoService extends Service {
       try {
          server.stop();
          isStarted = false;
+         onStatusChanged();
       } catch (Throwable e) {
          Log.e(TAG, "failed to start server", e);
       }
@@ -85,4 +90,18 @@ public class NanoService extends Service {
    // This is the object that receives interactions from clients.  See
    // RemoteService for a more complete example.
    private final IBinder mBinder = new NanoBinder();
+
+   // region listener
+   public final HashSet<Listener> listeners = new HashSet<>();
+
+   void onStatusChanged() {
+      for (Listener listener : listeners) {
+         listener.onStatusChanged(isStarted);
+      }
+   }
+
+   public interface Listener {
+      public void onStatusChanged(boolean isStarted);
+   }
+   // endregion
 }
