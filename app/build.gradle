@@ -6,19 +6,16 @@ buildscript {
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
-//        flatDir {
-//            dirs  "../router-validator/build/libs"
-//        }
     }
     dependencies {
         classpath 'com.eyeem.router:router-validator:0.0.5-SNAPSHOT'
-        // these are required for local builds
-//        classpath 'org.yaml:snakeyaml:1.8'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.eyeem.routervalidator'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -59,5 +56,7 @@ dependencies {
     //compile 'com.eyeem.router:router:0.0.5-SNAPSHOT'
     compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
     compile 'com.github.jknack:handlebars:4.0.5'
+    compile 'com.eyeem.decorator:annotation:0.0.1-SNAPSHOT'
+    apt 'com.eyeem.decorator:processor:0.0.1-SNAPSHOT'
     compile project(':router')
 }

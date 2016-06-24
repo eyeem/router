@@ -1,7 +1,7 @@
 package com.eyeem.nanorouter.nano;
 
 import com.eyeem.nanorouter.file.FilePlugin;
-import com.eyeem.nanorouter.html.HtmlPlugin;
+import com.eyeem.nanorouter.moustache.MoustachePlugin;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class NanoServer extends NanoHTTPD {
    public NanoServer(int port, Map<String, Object> routing) {
       super(port);
       router = NanoRouter.prepare()
-         .plugin(new HtmlPlugin())
+         .plugin(new MoustachePlugin())
          .plugin(new FilePlugin())
          .load(routing);
    }

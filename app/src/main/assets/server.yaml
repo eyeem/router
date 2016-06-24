@@ -1,8 +1,10 @@
 ---
 '' :
-  html :
-    template : index.html
-    title : Nano Router
-    description : Showcase of router capabilities.
+  moustache :
+    - TemplateInstigator :
+        name : index.html
+    - MainContentDecorator :
+        title : Nano Router
+        description : Showcase of router capabilities.
 'static/:whatever:' :
   file : {}

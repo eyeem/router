@@ -89,15 +89,15 @@ public abstract class AbstractRouterLoader<O, P> {
       }
    }
 
-   static boolean isTuple(Object object) {
+   public static boolean isTuple(Object object) {
       return object instanceof Map && ((Map) object).entrySet().size() == 1;
    }
 
-   static boolean isArrayOrMap(Object object) {
+   public static boolean isArrayOrMap(Object object) {
       return object instanceof Map || object instanceof Array;
    }
 
-   static Map.Entry<String, Object> tuple(Object object) {
+   public static Map.Entry<String, Object> tuple(Object object) {
       return (Map.Entry<String, Object>) ((Map) object).entrySet().iterator().next();
    }
 
