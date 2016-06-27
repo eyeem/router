@@ -4,7 +4,7 @@ import com.eyeem.nanorouter.App;
 import com.eyeem.nanorouter.Assets;
 import com.eyeem.nanorouter.moustache.MoustacheDecorator;
 import com.eyeem.nanorouter.moustache.MoustachePlugin;
-import com.eyeem.nanorouter.nano.Response;
+import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.AbstractRouter;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
@@ -37,7 +37,7 @@ public class SectionContentDecorator extends MoustacheDecorator implements Moust
    }
 
    @Override
-   public void configFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
+   public void configFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
       sectionsContext = new HashMap<>();
 
       ArrayList<HashMap<String, Object>> inSections = (ArrayList<HashMap<String, Object>>) config;

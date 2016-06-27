@@ -14,7 +14,7 @@ import static com.eyeem.router.RouterUtils.cleanUrl;
 /**
  * Created by vishna on 22/06/16.
  */
-public class Response {
+public class ResponseWrapper {
 
    public String message;
    public String file;

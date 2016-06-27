@@ -4,7 +4,7 @@ import com.eyeem.nanorouter.App;
 import com.eyeem.nanorouter.Assets;
 import com.eyeem.nanorouter.moustache.MoustacheDecorator;
 import com.eyeem.nanorouter.moustache.MoustachePlugin;
-import com.eyeem.nanorouter.nano.Response;
+import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.AbstractRouter;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class TemplateInstigator extends MoustacheDecorator implements MoustacheD
    }
 
    @Override
-   public void configFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
+   public void configFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
       if (config instanceof Map) {
          Map<String, Object> map = (Map<String, Object>) config;
          templateName = (String) map.get("name");

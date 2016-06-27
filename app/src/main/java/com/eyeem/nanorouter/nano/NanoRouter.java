@@ -14,23 +14,23 @@ import fi.iki.elonen.NanoHTTPD;
 /**
  * Created by vishna on 22/06/16.
  */
-public class NanoRouter extends AbstractRouter<Response, NanoHTTPD.IHTTPSession> {
+public class NanoRouter extends AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession> {
 
    public static Loader prepare() { return new Loader(); }
 
-   public static class Loader extends AbstractRouterLoader<Response, NanoHTTPD.IHTTPSession> {
+   public static class Loader extends AbstractRouterLoader<ResponseWrapper, NanoHTTPD.IHTTPSession> {
 
       @Override
-      public AbstractPluggableBuilder<Response, NanoHTTPD.IHTTPSession> createPluggableBuilder(Serializable params, HashMap<String, Plugin<Response, NanoHTTPD.IHTTPSession>> plugins) {
+      public AbstractPluggableBuilder<ResponseWrapper, NanoHTTPD.IHTTPSession> createPluggableBuilder(Serializable params, HashMap<String, Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
          return new PluggableBuilder(params, plugins);
       }
 
-      @Override public AbstractRouter<Response, NanoHTTPD.IHTTPSession> createRouter() {
+      @Override public AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession> createRouter() {
          return new NanoRouter();
       }
 
       @Override
-      public Loader plugin(Plugin<Response, NanoHTTPD.IHTTPSession> plugin) {
+      public Loader plugin(Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> plugin) {
          return (Loader) super.plugin(plugin);
       }
 
@@ -40,22 +40,18 @@ public class NanoRouter extends AbstractRouter<Response, NanoHTTPD.IHTTPSession>
       }
    }
 
-   @Override public Response outputFor(String url) {
-      return super.outputFor(url);
-   }
+   public static class PluggableBuilder extends AbstractPluggableBuilder<ResponseWrapper, NanoHTTPD.IHTTPSession> {
 
-   public static class PluggableBuilder extends AbstractPluggableBuilder<Response, NanoHTTPD.IHTTPSession> {
-
-      PluggableBuilder(Serializable params, HashMap<String, Plugin<Response, NanoHTTPD.IHTTPSession>> plugins) {
+      PluggableBuilder(Serializable params, HashMap<String, Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
          super(params, plugins);
       }
 
-      @Override protected Response createOutputInstance() {
-         return new Response();
+      @Override protected ResponseWrapper createOutputInstance() {
+         return new ResponseWrapper();
       }
    }
 
-   public static abstract class P extends Plugin<Response, NanoHTTPD.IHTTPSession> {
+   public static abstract class P extends Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> {
       public P(String node) {
          super(node);
       }

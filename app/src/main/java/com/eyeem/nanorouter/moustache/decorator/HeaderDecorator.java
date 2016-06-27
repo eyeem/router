@@ -2,7 +2,7 @@ package com.eyeem.nanorouter.moustache.decorator;
 
 import com.eyeem.nanorouter.moustache.MoustacheDecorator;
 import com.eyeem.nanorouter.moustache.MoustachePlugin;
-import com.eyeem.nanorouter.nano.Response;
+import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.AbstractRouter;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ public class HeaderDecorator extends MoustacheDecorator implements MoustachePlug
    }
 
    @Override
-   public void configFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
+   public void configFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
       if (config instanceof Map) {
          tmpConfig = (Map<String, Object>) config;
       }

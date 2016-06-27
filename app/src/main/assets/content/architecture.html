@@ -1,0 +1,32 @@
+<h4>Diagram overview</h4>
+<img src="static/architecture.svg"/>
+<h4>Service</h4>
+<p>All the network layer heavy lifting is done by <code>NanoServer</code>. From there the input, namely
+    the <code>IHTTPSession</code> object is dispatched to <code>NanoRouter</code>. In return the router
+    provides <code>Response</code>. The whole life of the server is governed by <code>NanoService</code>
+    started and stopped manually by admin from <code>MainActivity</code>
+</p>
+
+<h4>Router</h4>
+<p><code>NanoRouter</code> extends <code>AbstractRouter</code>. This allows automated conversion of
+    a request into a response. Please note that we don't use <code>NanoHTTPD.Response</code> directly
+    but rather use our own <code>ResponseWrapper</code>. This is because NanoHTTPD ctor is the only way
+    to set values and we want to set values later after the response object is created.
+</p>
+<pre class="prettyprint">public class NanoRouter extends AbstractRouter&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt; {
+
+   public static Loader prepare() { return new Loader(); } // convenience method
+
+   public static class Loader extends AbstractRouterLoader&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt; {
+      /**
+       *  helps you load the stuff from the config map
+       */
+   }
+
+   public static class PluggableBuilder extends AbstractPluggableBuilder&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt; {
+      /**
+       *  creates framework for your plugins that enable you to build your output
+       */
+   }
+}
+</pre>

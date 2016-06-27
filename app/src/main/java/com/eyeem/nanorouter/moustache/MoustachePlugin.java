@@ -2,7 +2,7 @@ package com.eyeem.nanorouter.moustache;
 
 import com.eyeem.router.AbstractRouter;
 import com.eyeem.nanorouter.nano.NanoRouter;
-import com.eyeem.nanorouter.nano.Response;
+import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.RouterLoader;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class MoustachePlugin extends NanoRouter.P {
       super("moustache");
    }
 
-   @Override public void outputFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, Response out) {
+   @Override public void outputFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, ResponseWrapper out) {
       if (!(config instanceof ArrayList)) return;
       ArrayList array = (ArrayList) config;
 
@@ -79,6 +79,6 @@ public class MoustachePlugin extends NanoRouter.P {
    }
 
    public interface Config {
-      public void configFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config);
+      public void configFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config);
    }
 }

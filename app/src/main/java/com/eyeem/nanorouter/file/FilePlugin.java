@@ -2,7 +2,7 @@ package com.eyeem.nanorouter.file;
 
 import com.eyeem.router.AbstractRouter;
 import com.eyeem.nanorouter.nano.NanoRouter;
-import com.eyeem.nanorouter.nano.Response;
+import com.eyeem.nanorouter.nano.ResponseWrapper;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class FilePlugin extends NanoRouter.P {
       super("file");
    }
 
-   @Override public void outputFor(AbstractRouter<Response, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, Response o) {
+   @Override public void outputFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, ResponseWrapper o) {
       Map<String, Object> map = ((Map<String, Object>)config);
       if (map.containsKey("root")) {
          String root = map.get("root").toString();
