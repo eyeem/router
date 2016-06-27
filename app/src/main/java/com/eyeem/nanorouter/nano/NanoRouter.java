@@ -40,6 +40,10 @@ public class NanoRouter extends AbstractRouter<Response, NanoHTTPD.IHTTPSession>
       }
    }
 
+   @Override public Response outputFor(String url) {
+      return super.outputFor(url);
+   }
+
    public static class PluggableBuilder extends AbstractPluggableBuilder<Response, NanoHTTPD.IHTTPSession> {
 
       PluggableBuilder(Serializable params, HashMap<String, Plugin<Response, NanoHTTPD.IHTTPSession>> plugins) {

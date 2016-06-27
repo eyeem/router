@@ -15,8 +15,8 @@
 #        content : download.html
 #      - title : Contributing
 #        content : contributing.html
-#      - title : License
-#        content : license.html
+      - title : License
+        content : license.html
     - VersionDecorator
 'static/:whatever:' :
   file : {}

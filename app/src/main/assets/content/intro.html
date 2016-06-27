@@ -1,9 +1,28 @@
-<p>Images add much-needed context and visual flair to Android applications. Picasso allows for hassle-free image loading in your application&mdash;often in one line of code!</p>
-<pre class="prettyprint">Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(imageView);</pre>
-<p>Many common pitfalls of image loading on Android are handled automatically by Picasso:</p>
-<ul>
-    <li>Handling <code>ImageView</code> recycling and download cancelation in an adapter.</li>
-    <li>Complex image transformations with minimal memory use.</li>
-    <li>Automatic memory and disk caching.</li>
-</ul>
-<p class="screenshot"><img src="static/sample.png" alt="Sample application screenshot."></p>
+<p>This sample app combines Router with <a href="https://github.com/NanoHttpd/nanohttpd">NanoHTTPD</a>
+    creating portable and embeddable web server that you can run in your pocket.
+    We top that with <a href="https://github.com/jknack/handlebars.java">{{moustache}} templates</a>
+    and EyeEm's <a href="https://github.com/eyeem/decorator">decorators</a> based layer generating the HTML source.</p>
+
+<p>EyeEm's <code>AbstractRouter</code> facilitates path based resolution of any input into any output.</p>
+<pre class="prettyprint">public class NanoServer extends NanoHTTPD {
+
+   private NanoRouter router;
+
+   public NanoServer(int port, Map&lt;String, Object&gt; routing) {
+      super(port);
+      router = NanoRouter.prepare()     // build custom router with your plugins
+         .plugin(new MoustachePlugin()) // HTML rendering
+         .plugin(new FilePlugin())      // local resources access (assets folder)
+         .load(routing);                // load routing map (e.g. defined in a YAML file)
+   }
+
+   @Override public Response serve(IHTTPSession session) {
+      try {
+         // just find the path & route to right resources
+         return router.outputFor(session.getUri(), session).build();
+      } catch (Exception e) {
+         return new Response(stackTraceToHtml(e));
+      }
+   }
+}
+</pre>
