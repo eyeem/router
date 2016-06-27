@@ -1,0 +1,55 @@
+<h4>Adapter Downloads</h4>
+<p>Adapter re-use is automatically detected and the previous download canceled.</p>
+<pre class="prettyprint">@Override public void getView(int position, View convertView, ViewGroup parent) {
+  SquaredImageView view = (SquaredImageView) convertView;
+  if (view == null) {
+    view = new SquaredImageView(context);
+  }
+  String url = getItem(position);
+
+  Picasso.with(context).load(url).into(view);
+}</pre>
+
+<h4>Image Transformations</h4>
+<p>Transform images to better fit into layouts and to reduce memory size.</p>
+<pre class="prettyprint">Picasso.with(context)
+  .load(url)
+  .resize(50, 50)
+  .centerCrop()
+  .into(imageView)</pre>
+<p>You can also specify custom transformations for more advanced effects.</p>
+<pre class="prettyprint">public class CropSquareTransformation implements Transformation {
+  @Override public Bitmap transform(Bitmap source) {
+    int size = Math.min(source.getWidth(), source.getHeight());
+    int x = (source.getWidth() - size) / 2;
+    int y = (source.getHeight() - size) / 2;
+    Bitmap result = Bitmap.createBitmap(source, x, y, size, size);
+    if (result != source) {
+      source.recycle();
+    }
+    return result;
+  }
+
+  @Override public String key() { return "square()"; }
+}</pre>
+<p>Pass an instance of this class to the <code>transform</code> method.</p>
+
+<h4>Place Holders</h4>
+<p>Picasso supports both download and error placeholders as optional features.</p>
+<pre class="prettyprint">Picasso.with(context)
+    .load(url)
+    .placeholder(R.drawable.user_placeholder)
+    .error(R.drawable.user_placeholder_error)
+    .into(imageView);</pre>
+<p>A request will be retried three times before the error placeholder is shown.</p>
+
+
+<h4>Resource Loading</h4>
+<p>Resources, assets, files, content providers are all supported as image sources.</p>
+<pre class="prettyprint">Picasso.with(context).load(R.drawable.landing_screen).into(imageView1);
+Picasso.with(context).load("file:///android_asset/DvpvklR.png").into(imageView2);
+Picasso.with(context).load(new File(...)).into(imageView3);</pre>
+
+<h4>Debug Indicators</h4>
+<p>For development you can enable the display of a colored ribbon which indicates the image source. Call <code>setIndicatorsEnabled(true)</code> on the Picasso instance.</p>
+<p class="screenshot"><img src="static/debug.png" alt="Debug ribbon indicators"></p>

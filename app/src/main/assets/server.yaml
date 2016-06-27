@@ -6,7 +6,17 @@
     - HeaderDecorator :
         title : Nano Router
         description : Showcase of router capabilities.
-    - MainContentDecorator : {}
+    - SectionContentDecorator :
+      - title : Introduction
+        content : intro.html
+#      - title : Features
+#        content : features.html
+#      - title : Download
+#        content : download.html
+#      - title : Contributing
+#        content : contributing.html
+#      - title : License
+#        content : license.html
     - VersionDecorator
 'static/:whatever:' :
   file : {}

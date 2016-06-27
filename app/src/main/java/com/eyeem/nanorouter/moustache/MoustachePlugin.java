@@ -38,10 +38,9 @@ public class MoustachePlugin extends NanoRouter.P {
          if (o instanceof Map && RouterLoader.isTuple(o)) {
             Map.Entry<String, Object> tuple = RouterLoader.tuple(o);
             String className = tuple.getKey();
-            if (tuple.getValue() instanceof Map) {
-               Map<String, Object> decoratorConfig = (Map<String, Object>) tuple.getValue();
+            if (tuple.getValue() instanceof Map || tuple.getValue() instanceof ArrayList) {
                Class decoratorClass = classForName(DECORATORS_PACKAGE, className);
-               configs.put(decoratorClass, decoratorConfig);
+               configs.put(decoratorClass, tuple.getValue());
                engineBuilder.addDecorator(decoratorClass);
             }
             continue;
