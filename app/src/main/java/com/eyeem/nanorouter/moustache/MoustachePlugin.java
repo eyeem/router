@@ -1,10 +1,6 @@
 package com.eyeem.nanorouter.moustache;
 
-import com.eyeem.nanorouter.moustache.decorator.MainContentDecorator;
-import com.eyeem.nanorouter.moustache.decorator.TemplateInstigator;
 import com.eyeem.router.AbstractRouter;
-import com.eyeem.nanorouter.App;
-import com.eyeem.nanorouter.Assets;
 import com.eyeem.nanorouter.nano.NanoRouter;
 import com.eyeem.nanorouter.nano.Response;
 import com.eyeem.router.RouterLoader;
