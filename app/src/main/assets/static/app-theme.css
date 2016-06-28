@@ -17,7 +17,7 @@ a.dl {
 
 header menu li a:hover,
 a.dl:hover {
-  background-color: #a74140;
+  background-color: #333;
 }
 a {
   color: #2c8;

@@ -20,7 +20,7 @@
       - title : License
         content : license.html
     - VersionDecorator
-  log : {}
+  log : {}                                # log plugin - track anyone accessing this endpoint
 'static/:whatever:' :                     # route all `static/*` traffic
   file :                                  # using file plugin
     path : 'assets://static/%{whatever}'  # to this assets folder

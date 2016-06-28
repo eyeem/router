@@ -28,7 +28,7 @@ public class LogPlugin extends NanoRouter.P {
          Map<String, String> headers = session.getHeaders();
 
          for (Map.Entry<String, String> entry : headers.entrySet()) {
-            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+            sb.append("\n").append(entry.getKey()).append(" = ").append(entry.getValue());
          }
 
          log("CONNECTION", sb.toString());
