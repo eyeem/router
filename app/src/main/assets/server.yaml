@@ -1,9 +1,9 @@
 ---
-'' :
-  moustache :
-    - TemplateInstigator :
-        name : index.html
-    - HeaderDecorator :
+'' :                       # root `/` path
+  moustache :              # uses `moustache` plugin
+    - TemplateInstigator : # use `TemplateInstigator` as one of the decorators
+        name : index.html  # with these params
+    - HeaderDecorator :    # etc....
         title : Nano Router
         description : Web Server in your pants!
     - SectionContentDecorator :
@@ -11,12 +11,11 @@
         content : intro.html
       - title : Architecture
         content : architecture.html
-#      - title : Download
-#        content : download.html
-#      - title : Contributing
-#        content : contributing.html
+      - title : Moustache
+        content : moustache.html
       - title : License
         content : license.html
     - VersionDecorator
-'static/:whatever:' :
-  file : {}
+'static/:whatever:' :                     # route all `static/*` traffic
+  file :                                  # using file plugin
+    path : 'assets://static/%{whatever}'  # to this assets folder

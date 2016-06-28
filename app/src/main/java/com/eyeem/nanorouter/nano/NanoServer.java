@@ -1,7 +1,7 @@
 package com.eyeem.nanorouter.nano;
 
-import com.eyeem.nanorouter.file.FilePlugin;
-import com.eyeem.nanorouter.moustache.MoustachePlugin;
+import com.eyeem.nanorouter.plugins.FilePlugin;
+import com.eyeem.nanorouter.plugins.MoustachePlugin;
 
 import java.util.Map;
 

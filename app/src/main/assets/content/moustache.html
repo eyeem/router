@@ -1,0 +1,128 @@
+<h4>Engine</h4>
+<p>HTML generation is a straightforward process of mixing appropriate moustache template
+    and data. We could define it something like this:
+</p>
+<pre class="prettyprint">
+public class BaseMoustacheEngine {
+
+   Map&lt;String, Object&gt; context;
+
+   public BaseMoustacheEngine() {
+      context = new HashMap&lt;&gt;();
+   }
+
+   public String getTemplateSource() { return null; }
+   public void onGenerateContext(Map&lt;String, Object&gt; context) {}
+
+   public String generatePage() {
+      onGenerateContext(context);
+      try {
+         Handlebars handlebars = new Handlebars();
+         Template template = handlebars.compileInline(getTemplateSource());
+         return template.apply(context);
+      } catch (IOException e) {
+         return null;
+      }
+   }
+}
+</pre>
+
+<p>Using the decorators library we then tell which methods we would like to decorate in our blueprint:</p>
+
+<pre class="prettyprint">
+@Decorate(
+   decorator = "MoustacheDecorator",
+   decoratored = "MoustacheEngine",
+   decorators = "MoustacheDecorators")
+public class BlueprintMoustacheEngine extends BaseMoustacheEngine {
+
+   @Override public String getTemplateSource() { return null; }
+   @Override public void onGenerateContext(Map&lt;String, Object&gt; context) {}
+}
+</pre>
+
+<h4>Plugin</h4>
+<p>The plugin sets up <code>MoustacheEngine</code> accordingly to the given input config/router path</p>
+<pre class="prettyprint">
+public class MoustachePlugin extends NanoRouter.P {
+
+   public final static String DECORATORS_PACKAGE = "com.eyeem.nanorouter.moustache.decorator";
+
+   public MoustachePlugin() {
+      super("moustache"); // this is how Nano.PluggableBuilder knows which plugin to call
+   }
+
+   @Override public void outputFor(AbstractRouter&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt;.RouteContext context, Object config, ResponseWrapper out) {
+      if (!(config instanceof ArrayList)) return;
+      ArrayList array = (ArrayList) config;
+
+      // we build the MoustacheEngine so that we can render page at later point
+      MoustacheEngine engine = new MoustacheEngine();
+      MoustacheEngine.Builder engineBuilder = new MoustacheEngine.Builder();
+
+      Map&lt;Class, Object&gt; configs = new HashMap&lt;&gt;();
+
+      // we iterate over config, add appropriate decorators to builder and collect
+      // their internal configs so we can pass them later
+      for (Object o : array) {
+         // parametrized decorator
+         if (o instanceof Map && RouterLoader.isTuple(o)) {
+            Map.Entry&lt;String, Object&gt; tuple = RouterLoader.tuple(o);
+            String className = tuple.getKey();
+            if (tuple.getValue() instanceof Map || tuple.getValue() instanceof ArrayList) {
+               Class decoratorClass = classForName(DECORATORS_PACKAGE, className);
+               // we need to remember each decorator's config so we can pass it later
+               configs.put(decoratorClass, tuple.getValue());
+               engineBuilder.addDecorator(decoratorClass);
+            }
+            continue;
+         }
+         // garbage
+         else if (!(o instanceof String)) {
+            continue;
+         }
+         // plain decorator
+         else {
+            engineBuilder.addDecorator(classForName(DECORATORS_PACKAGE, (String) o));
+         }
+      }
+
+      // finish building the rendering engine with all the decorators
+      engine.bind(engineBuilder);
+
+      // now we just need to run through all the configs
+      for (Map.Entry&lt;Class, Object&gt; decoratorConfig : configs.entrySet()) {
+         MoustacheDecorator decorator = engine.getDecorators().getFirstDecoratorOfType(decoratorConfig.getKey());
+         if (decorator instanceof Config) {
+            ((Config)decorator).configFor(context, decoratorConfig.getValue());
+         }
+      }
+
+      // send the message to server
+      out.message = engine.generatePage();
+   }
+
+   /**
+    * Interface for providing decorators with appropriate configs
+    */
+   public interface Config {
+      public void configFor(AbstractRouter&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt;.RouteContext context, Object config);
+   }
+}
+</pre>
+
+<h4>Decorators</h4>
+
+This example decorator adds Android app's name and version to the moustache context.
+
+<pre class="prettyprint">
+public class VersionDecorator extends MoustacheDecorator {
+   @Override public void onGenerateContext(Map&lt;String, Object&gt; context) {
+      try {
+         String versionName = App.the.getPackageManager().getPackageInfo(App.the.getPackageName(), 0).versionName;
+         context.put("versionName", versionName);
+      } catch (Throwable t) {}
+      context.put("appName", App.the.getString(R.string.app_name));
+   }
+}
+</pre>

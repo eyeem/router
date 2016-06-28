@@ -17,19 +17,19 @@ import static com.eyeem.router.RouterUtils.cleanUrl;
 public class ResponseWrapper {
 
    public String message;
-   public String file;
+   public String asset;
 
    public NanoHTTPD.Response build() {
-      if (file != null) {
-         return buildFile();
+      if (asset != null) {
+         return buildAsset();
       }
       return new NanoHTTPD.Response(message);
    }
 
-   public NanoHTTPD.Response buildFile() {
+   public NanoHTTPD.Response buildAsset() {
       try {
-         InputStream is = App.the.getAssets().open(cleanUrl(file));
-         return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, getMimeType(file), is);
+         InputStream is = App.the.getAssets().open(cleanUrl(asset));
+         return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, getMimeType(asset), is);
       } catch (IOException e) {
          return null;
       }

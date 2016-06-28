@@ -1,4 +1,4 @@
-package com.eyeem.nanorouter.file;
+package com.eyeem.nanorouter.plugins;
 
 import com.eyeem.router.AbstractRouter;
 import com.eyeem.nanorouter.nano.NanoRouter;
@@ -13,17 +13,18 @@ import fi.iki.elonen.NanoHTTPD;
  */
 public class FilePlugin extends NanoRouter.P {
 
+   public static String ASSETS_PREFIX = "assets://";
+
    public FilePlugin() {
       super("file");
    }
 
    @Override public void outputFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config, ResponseWrapper o) {
       Map<String, Object> map = ((Map<String, Object>)config);
-      if (map.containsKey("root")) {
-         String root = map.get("root").toString();
-         o.file = root + context.url();
-      } else {
-         o.file = context.url();
+      String path = map.get("path").toString();
+
+      if (path.startsWith(ASSETS_PREFIX)) {
+         o.asset = path.substring(ASSETS_PREFIX.length(), path.length());
       }
    }
 }

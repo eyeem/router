@@ -3,7 +3,7 @@ package com.eyeem.nanorouter.moustache.decorator;
 import com.eyeem.nanorouter.App;
 import com.eyeem.nanorouter.Assets;
 import com.eyeem.nanorouter.moustache.MoustacheDecorator;
-import com.eyeem.nanorouter.moustache.MoustachePlugin;
+import com.eyeem.nanorouter.plugins.MoustachePlugin;
 import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.AbstractRouter;
 import com.github.jknack.handlebars.Handlebars;
@@ -40,6 +40,10 @@ public class SectionContentDecorator extends MoustacheDecorator implements Moust
    public void configFor(AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPSession>.RouteContext context, Object config) {
       sectionsContext = new HashMap<>();
 
+      // HACK for having the YAML file referenced inside section
+      // better solution: some helper method exposed?
+      sectionsContext.put("server_yaml", Assets._from(App.the, "server.yaml"));
+
       ArrayList<HashMap<String, Object>> inSections = (ArrayList<HashMap<String, Object>>) config;
       ArrayList<HashMap<String, Object>> outSections = new ArrayList<>();
 
@@ -47,7 +51,17 @@ public class SectionContentDecorator extends MoustacheDecorator implements Moust
          HashMap<String, Object> outSection = new HashMap<>();
          outSection.putAll(inSection);
          outSection.put("id", inSection.get("title").toString().toLowerCase().replaceAll(" ", "_"));
-         outSection.put("content", Assets._from(App.the, "content/"+ inSection.get("content")));
+
+         String contentTemplate = Assets._from(App.the, "content/"+ inSection.get("content"));
+         String content = null;
+
+         try {
+            Handlebars handlebars = new Handlebars();
+            Template template = handlebars.compileInline(contentTemplate);
+            content = template.apply(sectionsContext);
+         } catch (IOException e) {}
+
+         outSection.put("content", content);
          outSections.add(outSection);
       }
 

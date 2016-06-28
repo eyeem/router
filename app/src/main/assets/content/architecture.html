@@ -30,3 +30,16 @@
    }
 }
 </pre>
+<h4>SERVER.YAML</h4>
+<p><code>NanoRouter.Loader</code> accepts a hash map object as its config. This means could do the config more statically typed
+    (e.g. programmatically) or you could go with <code>XML</code> for instance if you hate yourself.
+</p>
+<p>We'll use <code>YAML</code> as all the parsing code you need to write is as much as this:</p>
+<pre class="prettyprint">
+    String yamlStr = Assets.from(context, "server.yaml");
+    Map&lt;String, Object&gt; routing = (Map&lt;String, Object&gt;) new Yaml().load(yamlStr);
+</pre>
+<p>And this is what our config file looks like:</p>
+<pre class="prettyprint">
+{{{server_yaml}}}
+</pre>

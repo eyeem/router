@@ -1,7 +1,7 @@
 package com.eyeem.nanorouter.moustache.decorator;
 
 import com.eyeem.nanorouter.moustache.MoustacheDecorator;
-import com.eyeem.nanorouter.moustache.MoustachePlugin;
+import com.eyeem.nanorouter.plugins.MoustachePlugin;
 import com.eyeem.nanorouter.nano.ResponseWrapper;
 import com.eyeem.router.AbstractRouter;
 

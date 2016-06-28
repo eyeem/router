@@ -14,7 +14,7 @@ public class BaseMoustacheEngine {
 
    Map<String, Object> context;
 
-   BaseMoustacheEngine() {
+   public BaseMoustacheEngine() {
       context = new HashMap<>();
    }
 
