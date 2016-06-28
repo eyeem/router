@@ -11,6 +11,8 @@
         content : intro.html
       - title : Architecture
         content : architecture.html
+      - title : Plugins
+        content : plugins.html
       - title : Moustache
         content : moustache.html
       - title : License

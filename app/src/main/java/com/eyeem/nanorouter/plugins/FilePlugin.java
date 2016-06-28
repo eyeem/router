@@ -26,5 +26,6 @@ public class FilePlugin extends NanoRouter.P {
       if (path.startsWith(ASSETS_PREFIX)) {
          o.asset = path.substring(ASSETS_PREFIX.length(), path.length());
       }
+      // ..etc
    }
 }

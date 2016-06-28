@@ -1,0 +1,26 @@
+<p>Plugins are a key part of Router library. They compose they output for the given path</p>
+
+<h4>Example</h4>
+
+<pre class="prettyprint">
+public class FilePlugin extends NanoRouter.P {
+
+   public static String ASSETS_PREFIX = "assets://";
+
+   public FilePlugin() {
+      super("file"); // this is how NanoRouter.PluggableBuilder knows what to trigger
+   }
+
+   @Override public void outputFor(AbstractRouter&lt;ResponseWrapper, NanoHTTPD.IHTTPSession&gt;.RouteContext context, Object input, ResponseWrapper output) {
+      Map&lt;String, Object&gt; map = ((Map&lt;String, Object&gt;)input); // the input data
+      String path = map.get("path").toString();
+
+      if (path.startsWith(ASSETS_PREFIX)) {
+         r.asset = path.substring(ASSETS_PREFIX.length(), path.length()); // the output data
+      }
+      // ..etc
+   }
+}
+</pre>
+
+<p>Important: More than one plugin can generate (compose) output for a given path at once.</p>
