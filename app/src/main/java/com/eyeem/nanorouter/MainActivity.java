@@ -10,12 +10,17 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.eyeem.nanorouter.ui.ServerEvent;
+import com.eyeem.nanorouter.ui.ServerEventAdapter;
+import com.eyeem.nanorouter.ui.ServerEventStorage;
 import com.eyeem.router.Plugin;
 import com.eyeem.router.Router;
 import com.eyeem.router.RouterLoader;
@@ -25,10 +30,27 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
 
+import static com.eyeem.nanorouter.ui.ServerEventStorage.list;
+import static com.eyeem.nanorouter.ui.ServerEventStorage.log;
+
 public class MainActivity extends AppCompatActivity implements NanoService.Listener {
 
    CoordinatorLayout root;
    FloatingActionButton fab;
+   RecyclerView recycler;
+   ServerEventAdapter adapter;
+
+   RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
+      @Override public void onItemRangeInserted(int positionStart, int itemCount) {
+         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recycler.getLayoutManager();
+         int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
+         int lastPosition = list().size() - 1;
+         if (lastPosition - lastVisiblePosition > 2) {
+            return;
+         }
+         recycler.scrollToPosition(lastPosition);
+      }
+   };
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
 
       //com.eyeem.router.RouterConstants rc = new com.eyeem.router.RouterConstants();
       root = (CoordinatorLayout) findViewById(R.id.root);
+      recycler = (RecyclerView) findViewById(R.id.recycler);
+      recycler.setLayoutManager(new LinearLayoutManager(this));
+      recycler.setAdapter(adapter = new ServerEventAdapter());
+      adapter.registerAdapterDataObserver(observer);
 
       fab = (FloatingActionButton) findViewById(R.id.fab);
       fab.setOnClickListener(new View.OnClickListener() {
@@ -53,11 +79,16 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       });
 
       doBindService();
+
+      if (savedInstanceState == null) {
+         log("MainActivity OPENED", "Press `PLAY` to launch server.");
+      }
    }
 
    @Override
    protected void onDestroy() {
       super.onDestroy();
+      adapter.unregisterAdapterDataObserver(observer);
       doUnbindService();
    }
 
@@ -83,24 +114,24 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       return super.onOptionsItemSelected(item);
    }
 
-   public static View.OnClickListener test = new View.OnClickListener() {
-      @Override public void onClick(View v) {
-
-         String yamlStr = Assets._from(v.getContext(), "map.yaml");
-
-         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlStr);
-
-         Router r = RouterLoader
-            .prepare()
-            .plugin(new RequestPlugin())
-            .plugin(new DecoratorsPlugin())
-            .load(routerMap);
-
-         String id = "me";
-
-         Bundle bundle = r.outputFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
-      }
-   };
+//   public static View.OnClickListener test = new View.OnClickListener() {
+//      @Override public void onClick(View v) {
+//
+//         String yamlStr = Assets._from(v.getContext(), "map.yaml");
+//
+//         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlStr);
+//
+//         Router r = RouterLoader
+//            .prepare()
+//            .plugin(new RequestPlugin())
+//            .plugin(new DecoratorsPlugin())
+//            .load(routerMap);
+//
+//         String id = "me";
+//
+//         Bundle bundle = r.outputFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
+//      }
+//   };
 
    @Override protected void onResume() {
       super.onResume();

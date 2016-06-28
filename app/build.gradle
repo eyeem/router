@@ -37,6 +37,9 @@ android {
     lintOptions {
         abortOnError false
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 router {
@@ -52,6 +55,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
     compile 'org.yaml:snakeyaml:1.8'
     //compile 'com.eyeem.router:router:0.0.5-SNAPSHOT'
     compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'

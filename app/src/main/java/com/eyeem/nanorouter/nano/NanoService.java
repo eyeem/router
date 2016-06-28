@@ -13,6 +13,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.util.HashSet;
 import java.util.Map;
 
+import static com.eyeem.nanorouter.ui.ServerEventStorage.log;
+
 /**
  * Created by vishna on 22/06/16.
  */
@@ -41,11 +43,17 @@ public class NanoService extends Service {
       String yamlStr = Assets._from(this, "server.yaml");
       Map<String, Object> routing = (Map<String, Object>) new Yaml().load(yamlStr);
       server = new NanoServer(8080, routing);
+      log("NanoService", "CREATED");
+      listeners.add(new Listener() {
+         @Override public void onStatusChanged(boolean isStarted) {
+            log("Server", isStarted ? "STARTED" : "STOPPED");
+         }
+      });
    }
 
    @Override
    public int onStartCommand(Intent intent, int flags, int startId) {
-      Log.i("TAG", "Received start id " + startId + ": " + intent);
+      log("NanoService", "Received start id " + startId + " : " + intent);
       return START_NOT_STICKY;
    }
 

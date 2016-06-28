@@ -15,9 +15,12 @@
         content : plugins.html
       - title : Moustache
         content : moustache.html
+      - title : Admin Console
+        content : admin.html
       - title : License
         content : license.html
     - VersionDecorator
+  log : {}
 'static/:whatever:' :                     # route all `static/*` traffic
   file :                                  # using file plugin
     path : 'assets://static/%{whatever}'  # to this assets folder
