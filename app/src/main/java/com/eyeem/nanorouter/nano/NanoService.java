@@ -4,12 +4,16 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import com.eyeem.nanorouter.Assets;
 
 import org.yaml.snakeyaml.Yaml;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -85,6 +89,14 @@ public class NanoService extends Service {
       }
    }
 
+   public String getServerAddressPretty() {
+      try {
+         return getLocalIpAddress() + ":" + server.getListeningPort();
+      } catch (Exception e) {
+         return null;
+      }
+   }
+
    @Override
    public void onDestroy() {
       stop();
@@ -112,4 +124,18 @@ public class NanoService extends Service {
       public void onStatusChanged(boolean isStarted);
    }
    // endregion
+
+   private String getLocalIpAddress() throws Exception {
+      for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+         NetworkInterface intf = en.nextElement();
+         for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+            InetAddress inetAddress = enumIpAddr.nextElement();
+            if (!inetAddress.isLoopbackAddress()) {
+               String ip = Formatter.formatIpAddress(inetAddress.hashCode());
+               return ip;
+            }
+         }
+      }
+      return null;
+   }
 }

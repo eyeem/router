@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       setContentView(R.layout.activity_main);
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
+      getSupportActionBar().setSubtitle("something something");
 
       //com.eyeem.router.RouterConstants rc = new com.eyeem.router.RouterConstants();
       root = (CoordinatorLayout) findViewById(R.id.root);
@@ -144,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       if (fab != null) {
          fab.setImageResource(isStarted ? R.drawable.ic_pause_32dp : R.drawable.ic_play_arrow_32dp);
       }
+
+      ActionBar actionBar = getSupportActionBar();
+      if (actionBar != null) {
+         actionBar.setSubtitle(isStarted ? nanoService.getServerAddressPretty() : null);
+      }
    }
 
    public static class DecoratorsPlugin extends Plugin<Bundle, Bundle> {
@@ -177,9 +184,6 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
             nanoService.listeners.add(MainActivity.this);
             onStatusChanged(nanoService.isStarted());
          }
-
-         // Tell the user about this for our demo.
-         Snackbar.make(root, "Service connected", Snackbar.LENGTH_LONG);
       }
 
       public void onServiceDisconnected(ComponentName className) {
@@ -191,7 +195,11 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
             nanoService.listeners.remove(MainActivity.this);
             nanoService = null;
          }
-         Snackbar.make(root, "Service disconnected", Snackbar.LENGTH_LONG);
+
+         ActionBar actionBar = getSupportActionBar();
+         if (actionBar != null) {
+            actionBar.setSubtitle(null);
+         }
       }
    };
 
