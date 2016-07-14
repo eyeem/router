@@ -1,0 +1,10 @@
+System.setProperty("java.awt.headless", "true")
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':router-validator')
+}

@@ -127,7 +127,7 @@ class RouterNode {
         for (int index = 0; index < routerParts.length; index++) {
             String routerPart = routerParts[index];
 
-            if (routerPart.charAt(0) == ':') {
+            if (routerPart.length() > 0 && routerPart.charAt(0) == ':') {
                 String key = routerPart.substring(1, routerPart.length());
 
                 // handle :whatever: param

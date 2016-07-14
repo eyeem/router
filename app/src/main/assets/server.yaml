@@ -1,5 +1,6 @@
 ---
 '' :                       # root `/` path
+  type : home              # used by router-validator plugin
   moustache :              # uses `moustache` plugin
     - TemplateInstigator : # use `TemplateInstigator` as one of the decorators
         name : index.html  # with these params

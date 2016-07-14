@@ -27,5 +27,8 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
+// This project's rootProject is ":buildSrc", so it should have a copy of build-script settings of the "/build.gradle"
+apply from: file('../metadata.gradle')
+
 // Plugin publishing
-apply from: '../gradle-mvn-push.gradle'
+apply from: file('../gradle-mvn-push.gradle')

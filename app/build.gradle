@@ -8,13 +8,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.eyeem.router:router-validator:0.0.5-SNAPSHOT'
+        // buildSrc trick to get around this egg-chicken problem
+        // classpath 'com.eyeem.router:router-validator:0.0.7-SNAPSHOT'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
 apply plugin: 'com.android.application'
-//apply plugin: 'com.eyeem.routervalidator'
+apply plugin: 'com.eyeem.routervalidator'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -42,13 +43,12 @@ android {
     }
 }
 
-//router {
-//    path = "app/src/main/assets/map.yaml"
-//    packageName = "com.eyeem.nanorouter.router"
-//    decoratorsPackageName = "com.eyeem.nanorouter.decorators"
-//    holdersPackageName = "com.eyeem.nanorouter"
-//    resourcePackageName = "com.eyeem.nanorouter"
-//}
+router {
+    path = "app/src/main/assets/server.yaml"
+    packageName = "com.eyeem.nanorouter"
+    decoratorsPackageName = "com.eyeem.nanorouter.moustache.decorator"
+    resourcePackageName = "com.eyeem.nanorouter"
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
