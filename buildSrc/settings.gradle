@@ -1,0 +1,2 @@
+include ':router-validator'
+project(':router-validator').projectDir = new File('../router-validator')

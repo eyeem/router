@@ -8,13 +8,18 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.eyeem.router:router-validator:0.0.5-SNAPSHOT'
+//        classpath project(':router-validator') // Error: Cannot use project dependencies in a script classpath definition.
+//        project.getTasks().add([name: "router-validator", type: GradleBuild]) {
+//            buildFile = '../router-validator/build.gradle'
+//            tasks = ['pluginJar']
+//        }.execute()
+        //classpath 'com.eyeem.router:router-validator:0.0.7-SNAPSHOT'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
 apply plugin: 'com.android.application'
-//apply plugin: 'com.eyeem.routervalidator'
+apply plugin: 'com.eyeem.routervalidator'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -42,13 +47,13 @@ android {
     }
 }
 
-//router {
-//    path = "app/src/main/assets/map.yaml"
-//    packageName = "com.eyeem.nanorouter.router"
-//    decoratorsPackageName = "com.eyeem.nanorouter.decorators"
-//    holdersPackageName = "com.eyeem.nanorouter"
-//    resourcePackageName = "com.eyeem.nanorouter"
-//}
+router {
+    path = "app/src/main/assets/server.yaml"
+    packageName = "com.eyeem.nanorouter"
+    decoratorsPackageName = "com.eyeem.nanorouter.moustache.decorator"
+    resourcePackageName = "com.eyeem.nanorouter"
+    holdersPackageName = ""
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

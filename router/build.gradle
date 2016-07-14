@@ -29,4 +29,5 @@ dependencies {
 }
 
 // uploadArchives from https://github.com/chrisbanes/gradle-mvn-push
-apply from: '../gradle-mvn-push.gradle'
+apply from: file('../metadata.gradle')
+apply from: file('../gradle-mvn-push.gradle')

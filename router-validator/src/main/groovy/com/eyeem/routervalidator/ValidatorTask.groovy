@@ -2,6 +2,7 @@ package com.eyeem.routervalidator
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.yaml.snakeyaml.Yaml
@@ -13,7 +14,7 @@ class ValidatorTask extends DefaultTask {
 
     @Input String packageName
     @Input String decoratorsPackageName
-    @Input String holdersPackageName
+    @Input @Optional String holdersPackageName
     @Input String resourcePackageName
 
     /**
@@ -51,7 +52,7 @@ class ValidatorTask extends DefaultTask {
                 resourcePackageName : resourcePackageName
         ]
 
-        ClassEmitter emitter = [template    : Templates.load(getClass().getClassLoader(), "RouterConstants"),
+        ClassEmitter emitter = [template    : Templates.load("RouterConstants"),
                                 templateData: templateData,
                                 baseDir     : outputDir,
                                 packageName : packageName,
