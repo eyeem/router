@@ -14,7 +14,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.eyeem.routervalidator'
+//apply plugin: 'com.eyeem.routervalidator'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -42,13 +42,13 @@ android {
     }
 }
 
-router {
-    path = "app/src/main/assets/map.yaml"
-    packageName = "com.eyeem.nanorouter.router"
-    decoratorsPackageName = "com.eyeem.nanorouter.decorators"
-    holdersPackageName = "com.eyeem.nanorouter"
-    resourcePackageName = "com.eyeem.nanorouter"
-}
+//router {
+//    path = "app/src/main/assets/map.yaml"
+//    packageName = "com.eyeem.nanorouter.router"
+//    decoratorsPackageName = "com.eyeem.nanorouter.decorators"
+//    holdersPackageName = "com.eyeem.nanorouter"
+//    resourcePackageName = "com.eyeem.nanorouter"
+//}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

@@ -18,7 +18,7 @@ import static com.eyeem.router.RouterUtils.classForName;
 /**
  * Created by vishna on 22/06/16.
  */
-public class MoustachePlugin extends NanoRouter.P {
+public class MoustachePlugin extends NanoRouter.Plugin {
 
    public final static String DECORATORS_PACKAGE = "com.eyeem.nanorouter.moustache.decorator";
 

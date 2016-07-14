@@ -11,7 +11,7 @@ import fi.iki.elonen.NanoHTTPD;
 /**
  * Created by vishna on 23/06/16.
  */
-public class FilePlugin extends NanoRouter.P {
+public class FilePlugin extends NanoRouter.Plugin {
 
    public static String ASSETS_PREFIX = "assets://";
 

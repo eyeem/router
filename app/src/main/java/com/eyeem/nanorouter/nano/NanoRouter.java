@@ -21,7 +21,8 @@ public class NanoRouter extends AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPS
    public static class Loader extends AbstractRouterLoader<ResponseWrapper, NanoHTTPD.IHTTPSession> {
 
       @Override
-      public AbstractPluggableBuilder<ResponseWrapper, NanoHTTPD.IHTTPSession> createPluggableBuilder(Serializable params, HashMap<String, Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
+      public AbstractPluggableBuilder<ResponseWrapper, NanoHTTPD.IHTTPSession> createPluggableBuilder(
+         Serializable params, HashMap<String, com.eyeem.router.Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
          return new PluggableBuilder(params, plugins);
       }
 
@@ -30,7 +31,7 @@ public class NanoRouter extends AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPS
       }
 
       @Override
-      public Loader plugin(Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> plugin) {
+      public Loader plugin(com.eyeem.router.Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> plugin) {
          return (Loader) super.plugin(plugin);
       }
 
@@ -42,7 +43,7 @@ public class NanoRouter extends AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPS
 
    public static class PluggableBuilder extends AbstractPluggableBuilder<ResponseWrapper, NanoHTTPD.IHTTPSession> {
 
-      PluggableBuilder(Serializable params, HashMap<String, Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
+      PluggableBuilder(Serializable params, HashMap<String, com.eyeem.router.Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession>> plugins) {
          super(params, plugins);
       }
 
@@ -51,8 +52,8 @@ public class NanoRouter extends AbstractRouter<ResponseWrapper, NanoHTTPD.IHTTPS
       }
    }
 
-   public static abstract class P extends Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> {
-      public P(String node) {
+   public static abstract class Plugin extends com.eyeem.router.Plugin<ResponseWrapper, NanoHTTPD.IHTTPSession> {
+      public Plugin(String node) {
          super(node);
       }
    }

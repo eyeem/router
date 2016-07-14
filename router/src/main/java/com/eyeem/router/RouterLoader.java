@@ -17,7 +17,7 @@ public class RouterLoader extends AbstractRouterLoader<Bundle, Bundle> {
 
    @Override public AbstractPluggableBuilder<Bundle, Bundle> createPluggableBuilder(
       Serializable params,
-      HashMap<String, Plugin<Bundle, Bundle>> plugins)
+      HashMap<String, com.eyeem.router.Plugin<Bundle, Bundle>> plugins)
    {
       return new PluggableBuilder(params, plugins);
    }
@@ -26,7 +26,7 @@ public class RouterLoader extends AbstractRouterLoader<Bundle, Bundle> {
       return new Router();
    }
 
-   @Override public RouterLoader plugin(Plugin<Bundle, Bundle> plugin) {
+   @Override public RouterLoader plugin(com.eyeem.router.Plugin<Bundle, Bundle> plugin) {
       return (RouterLoader) super.plugin(plugin);
    }
 
@@ -35,12 +35,24 @@ public class RouterLoader extends AbstractRouterLoader<Bundle, Bundle> {
    }
 
    public static class PluggableBuilder extends AbstractPluggableBuilder<Bundle, Bundle> {
-      PluggableBuilder(Serializable params, HashMap<String, Plugin<Bundle, Bundle>> plugins) {
+      PluggableBuilder(Serializable params, HashMap<String, com.eyeem.router.Plugin<Bundle, Bundle>> plugins) {
          super(params, plugins);
       }
 
       @Override protected Bundle createOutputInstance() {
          return new Bundle();
+      }
+   }
+
+   public static class Plugin extends com.eyeem.router.Plugin<Bundle, Bundle> {
+
+      public Plugin(String node) {
+         super(node);
+      }
+
+      @Override
+      public void outputFor(AbstractRouter<Bundle, Bundle>.RouteContext context, Object config, Bundle o) {
+
       }
    }
 }

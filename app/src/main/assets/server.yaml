@@ -24,3 +24,13 @@
 'static/:whatever:' :                     # route all `static/*` traffic
   file :                                  # using file plugin
     path : 'assets://static/%{whatever}'  # to this assets folder
+':notfound:' :
+  moustache :
+    - TemplateInstigator :
+        name : index.html
+    - HeaderDecorator :
+        title : Nano Router
+        description : 'Page "%{notfound}" Not Found!'
+    - VersionDecorator
+    - GiphyDecorator
+  log : {}

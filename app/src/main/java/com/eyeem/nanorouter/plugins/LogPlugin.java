@@ -13,7 +13,7 @@ import static com.eyeem.nanorouter.ui.ServerEventStorage.log;
 /**
  * Created by vishna on 28/06/16.
  */
-public class LogPlugin extends NanoRouter.P {
+public class LogPlugin extends NanoRouter.Plugin {
    public LogPlugin() {
       super("log");
    }
