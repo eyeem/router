@@ -34,3 +34,6 @@
     - VersionDecorator
     - GiphyDecorator
   log : {}
+'favicon.ico' :
+  file :
+    path : 'assets://static/favicon.ico'
