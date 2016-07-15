@@ -28,3 +28,5 @@ src/main/assets/crashlytics-build.properties
 
 # We generate changelog dynamically and send it to crashlytics
 CHANGELOG.md
+
+app/src/main/assets/server.yaml.kryo

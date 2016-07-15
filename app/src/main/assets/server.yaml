@@ -16,6 +16,8 @@
         content : plugins.html
       - title : Moustache
         content : moustache.html
+      - title : Optimize
+        content : optimize.html
       - title : Admin Console
         content : admin.html
       - title : License

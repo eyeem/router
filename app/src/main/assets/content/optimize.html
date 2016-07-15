@@ -1,0 +1,75 @@
+<h4>Pre Serialize Routing Hash Map</h4>
+<p>Every time you instantiate the router you need to supply it with a <code>HashMap</code>.
+    Following steps are usually followed:</p>
+<ul>
+    <li>Load an YAML file from assets folder</li>
+    <li>Parsing YAML file into a <code>HashMap</code></li>
+    <li>Supply the <code>HashMap</code> to <code>RouterLoader</code></li>
+</ul>
+<p>With few tricks we can move 2 first steps to compilation time so that we skip parsing overhead during runtime
+    (up to ~20x faster). In this example we're using <code>Kryo</code> library for serialization of the router map
+    (compile time). Once app is running we use Kryo again to deserialize.</p>
+
+<p>First we add our serialization task in <code>build.gradle</code> e.g.</p>
+
+<pre class="prettyprint">
+// make sure you have all the dependencies in place
+import org.yaml.snakeyaml.Yaml
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Output
+
+buildscript {
+    /**
+     *
+     */
+    dependencies {
+        classpath 'com.esotericsoftware.kryo:kryo:2.20'
+    }
+}
+
+// define serialization task
+task serializeRouterMap {
+    doFirst {
+        String yamlString = new File(router.path).getText('UTF-8')
+        LinkedHashMap&lt;String, Object&gt; routerMap = new LinkedHashMap&lt;&gt;(
+                (Map&lt;String, Object&gt;) new Yaml().load(yamlString)
+        ); // using linked hash map to preserve order
+
+        try {
+            File e = new File(router.path + ".kryo")
+            Kryo kryo = new Kryo()
+            Output output = new Output(new FileOutputStream(e))
+            kryo.writeObject(output, routerMap)
+            output.close()
+            println "[serialize router] OK"
+        } catch (Throwable t) {
+            println "[serialize router] FAIL..." + t.toString()
+        }
+    }
+}
+
+// hook serialization task into build process
+project.afterEvaluate {
+    prepareDebugDependencies.dependsOn(serializeRouterMap)
+    prepareReleaseDependencies.dependsOn(serializeRouterMap)
+}
+</pre>
+
+<p>Once you have serialization part ready, code down something like this to deserialize in your app</p>
+
+<pre class="prettyprint">
+public static HashMap loadHashMap(Context context, String filename) {
+   Kryo kryo = new Kryo();
+
+   try {
+      InputStream is = context.getAssets().open(filename);
+      Input input = new Input(is);
+      HashMap data = kryo.readObject(input, LinkedHashMap.class);
+      return data;
+   } catch (Throwable t) {
+      Log.e("loadHashMap", "loading map error", t);
+   }
+
+   return null;
+}
+</pre>

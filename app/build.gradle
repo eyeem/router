@@ -1,3 +1,7 @@
+import org.yaml.snakeyaml.Yaml
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Output
+
 apply plugin: 'com.android.application'
 
 buildscript {
@@ -11,6 +15,7 @@ buildscript {
         // buildSrc trick to get around this egg-chicken problem
         // classpath 'com.eyeem.router:router-validator:0.0.7-SNAPSHOT'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.esotericsoftware.kryo:kryo:2.20' // serializeRouter dependency
     }
 }
 
@@ -50,6 +55,32 @@ router {
     resourcePackageName = "com.eyeem.nanorouter"
 }
 
+task serializeRouterMap {
+    doFirst {
+        String yamlString = new File(router.path).getText('UTF-8')
+        LinkedHashMap<String, Object> routerMap = new LinkedHashMap<>(
+                (Map<String, Object>) new Yaml().load(yamlString)
+        ); // using linked hash map to preserve order
+
+        try {
+            File e = new File(router.path + ".kryo")
+            Kryo kryo = new Kryo()
+            Output output = new Output(new FileOutputStream(e))
+            kryo.writeObject(output, routerMap)
+            output.close()
+            println "[serialize router] OK"
+        } catch (Throwable t) {
+            println "[serialize router] FAIL..." + t.toString()
+        }
+    }
+}
+
+// add serialize Router dependency
+project.afterEvaluate {
+    prepareDebugDependencies.dependsOn(serializeRouterMap)
+    prepareReleaseDependencies.dependsOn(serializeRouterMap)
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -57,8 +88,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'org.yaml:snakeyaml:1.8'
-    //compile 'com.eyeem.router:router:0.0.5-SNAPSHOT'
+    compile 'com.esotericsoftware.kryo:kryo:2.20'
     compile 'com.nanohttpd:nanohttpd-webserver:2.1.1'
     compile 'com.github.jknack:handlebars:4.0.5'
     compile 'com.eyeem.decorator:annotation:0.0.1-SNAPSHOT'

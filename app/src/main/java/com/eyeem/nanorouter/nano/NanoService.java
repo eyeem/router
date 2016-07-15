@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.eyeem.nanorouter.Assets;
 
-import org.yaml.snakeyaml.Yaml;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -44,8 +42,11 @@ public class NanoService extends Service {
 
    @Override
    public void onCreate() {
-      String yamlStr = Assets._from(this, "server.yaml");
-      Map<String, Object> routing = (Map<String, Object>) new Yaml().load(yamlStr);
+      // this is slow
+//      String yamlStr = Assets._from(this, "server.yaml");
+//      Map<String, Object> routing = (Map<String, Object>) new Yaml().load(yamlStr);
+      // this is faster
+      Map<String, Object> routing = Assets.loadHashMap(this, "server.yaml.kryo");
       server = new NanoServer(8080, routing);
       log("NanoService", "CREATED");
       listeners.add(new Listener() {

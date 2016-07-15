@@ -1,12 +1,18 @@
 package com.eyeem.nanorouter;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 
 /**
  * Created by vishna on 17/02/15.
@@ -42,6 +48,21 @@ public class Assets {
          } catch (IOException e) {
          }
       }
+   }
+
+   public static HashMap loadHashMap(Context context, String filename) {
+      Kryo kryo = new Kryo();
+
+      try {
+         InputStream is = context.getAssets().open(filename);
+         Input input = new Input(is);
+         HashMap data = kryo.readObject(input, LinkedHashMap.class);
+         return data;
+      } catch (Throwable t) {
+         Log.e("loadHashMap", "loading map error", t);
+      }
+
+      return null;
    }
 }
 

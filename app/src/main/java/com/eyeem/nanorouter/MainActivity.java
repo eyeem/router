@@ -8,28 +8,17 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.eyeem.nanorouter.ui.ServerEvent;
 import com.eyeem.nanorouter.ui.ServerEventAdapter;
-import com.eyeem.nanorouter.ui.ServerEventStorage;
-import com.eyeem.router.Plugin;
-import com.eyeem.router.Router;
-import com.eyeem.router.RouterLoader;
 import com.eyeem.nanorouter.nano.NanoService;
-
-import org.yaml.snakeyaml.Yaml;
-
-import java.util.Map;
 
 import static com.eyeem.nanorouter.ui.ServerEventStorage.list;
 import static com.eyeem.nanorouter.ui.ServerEventStorage.log;
@@ -116,25 +105,6 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       return super.onOptionsItemSelected(item);
    }
 
-//   public static View.OnClickListener test = new View.OnClickListener() {
-//      @Override public void onClick(View v) {
-//
-//         String yamlStr = Assets._from(v.getContext(), "map.yaml");
-//
-//         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlStr);
-//
-//         Router r = RouterLoader
-//            .prepare()
-//            .plugin(new RequestPlugin())
-//            .plugin(new DecoratorsPlugin())
-//            .load(routerMap);
-//
-//         String id = "me";
-//
-//         Bundle bundle = r.outputFor("item/" + System.currentTimeMillis() + "/a/very/long/custom/path/1/2/3/4?color=234213");
-//      }
-//   };
-
    @Override protected void onResume() {
       super.onResume();
       if (nanoService != null) {
@@ -150,22 +120,6 @@ public class MainActivity extends AppCompatActivity implements NanoService.Liste
       ActionBar actionBar = getSupportActionBar();
       if (actionBar != null) {
          actionBar.setSubtitle(isStarted ? nanoService.getServerAddressPretty() : null);
-      }
-   }
-
-   public static class DecoratorsPlugin extends Plugin<Bundle, Bundle> {
-      public DecoratorsPlugin() { super("decorators"); }
-
-      @Override public void outputFor(Router.RouteContext context, Object config, Bundle bundle) {
-         Log.d(DecoratorsPlugin.class.getSimpleName(), config.toString());
-      }
-   }
-
-   public static class RequestPlugin extends Plugin<Bundle, Bundle> {
-      public RequestPlugin() { super("request"); }
-
-      @Override public void outputFor(Router.RouteContext context, Object config, Bundle bundle) {
-         Log.d(RequestPlugin.class.getSimpleName(), config.toString());
       }
    }
 
