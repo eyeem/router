@@ -16,6 +16,7 @@ class ValidatorTask extends DefaultTask {
     @Input String decoratorsPackageName
     @Input @Optional String holdersPackageName
     @Input String resourcePackageName
+    @Input @Optional String configFor
 
     /**
      * The output directory.
@@ -31,25 +32,39 @@ class ValidatorTask extends DefaultTask {
     @TaskAction
     def validate() {
         ArrayList<RouterNode> nodes = new ArrayList<>();
+        ArrayList<String> configDecorators = new ArrayList<>()
 
         String yamlString = new File(yamlFile).getText('UTF-8')
         Map<String, Object> routerMap = (Map<String, Object>) new Yaml().load(yamlString);
 
         routerMap.each {
             key, value -> if (value.type != null) {
-                nodes.add(new RouterNode(
+                // make register of all type nodes
+                RouterNode node = new RouterNode(
                         path: key,
                         type: value.type,
                         decoratorsPackageName: decoratorsPackageName,
                         holdersPackageName: holdersPackageName,
                         values: value
-                ).parse());
+                ).parse()
+                nodes.add(node)
+
+                // make register of all configFor decorators
+                node.configDecorators.each { decorator ->
+                    if (!configDecorators.contains(decorator)) {
+                        configDecorators.add(decorator)
+                    }
+                }
             }
         }
 
         def templateData = [
-                nodes : nodes,
-                resourcePackageName : resourcePackageName
+                configFor          : configFor,
+                nodes              : nodes,
+                configDecorators   : configDecorators.collect {
+                    it -> new DecoratorNode(it)
+                },
+                resourcePackageName: resourcePackageName
         ]
 
         ClassEmitter emitter = [template    : Templates.load("RouterConstants"),

@@ -53,6 +53,7 @@ router {
     packageName = "com.eyeem.nanorouter"
     decoratorsPackageName = "com.eyeem.nanorouter.moustache.decorator"
     resourcePackageName = "com.eyeem.nanorouter"
+    configFor = "com.eyeem.nanorouter.nano.ResponseWrapper"
 }
 
 task serializeRouterMap {

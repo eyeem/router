@@ -3,6 +3,14 @@ package $packageName;
 import java.util.Locale;
 import ${data.resourcePackageName}.R;
 
+import com.eyeem.router.Router;
+
+<% if (data.configFor?.trim()) { %>
+import ${data.configFor};
+import java.lang.reflect.Method;
+import java.util.HashMap;
+<% } %>
+
 public final class $className {
 
 <% data.nodes.each { node -> %>
@@ -26,6 +34,49 @@ public final class $className {
     <% } %>
     // endregion
 
+<% } %>
+
+<% if (data.configFor?.trim()) { %>
+   <% data.configDecorators.eachWithIndex { decorator, index -> %>
+   private final static int ${decorator.variableName} = ${index};
+   <% } %>
+
+   public static boolean configFor(Class decoratorClass, Router.RouteContext context, Object config, ${data.configFor} output) {
+      if (!mappings.containsKey(decoratorClass)) {
+         return dynamicConfigFor(decoratorClass, context, config, output);
+      }
+
+      switch (mappings.get(decoratorClass)) {
+         <% data.configDecorators.eachWithIndex { decorator, index -> %>
+         case ${decorator.variableName}: return ${decorator.className}.configFor(context, config, output);
+         <% } %>
+      }
+
+      return false;
+   }
+
+   private static boolean dynamicConfigFor(Class decoratorClass, Router.RouteContext context, Object config, ${data.configFor} output) {
+      try {
+         java.lang.reflect.Method configFor = methods.get(decoratorClass);
+         if (configFor == null) {
+            configFor = decoratorClass.getMethod("configFor", Router.RouteContext.class, Object.class, ${data.configFor}.class);
+            methods.put(decoratorClass, configFor);
+         }
+         return (Boolean)configFor.invoke(null, context, config, output);
+      } catch (Throwable e) {
+         return true;
+      }
+   }
+
+   private final static HashMap<Class, Integer> mappings;
+   private final static HashMap<Class, Method> methods;
+   static {
+      mappings = new HashMap<>();
+      <% data.configDecorators.eachWithIndex { decorator, index -> %>
+      mappings.put(${decorator.className}.class, ${decorator.variableName});
+      <% } %>
+      methods = new HashMap<>();
+   }
 <% } %>
 
 }

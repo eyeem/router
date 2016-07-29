@@ -39,6 +39,7 @@ class RouterPlugin implements Plugin<Project> {
                     holdersPackageName = project.router.holdersPackageName
                     decoratorsPackageName = project.router.decoratorsPackageName
                     resourcePackageName = project.router.resourcePackageName
+                    configFor = project.router.configFor
                 }
 
                 variant.registerJavaGeneratingTask(validatorTask, validatorTask.outputDir)

@@ -6,4 +6,5 @@ class RouterPluginExtension {
     String decoratorsPackageName
     String holdersPackageName
     String resourcePackageName
+    String configFor
 }

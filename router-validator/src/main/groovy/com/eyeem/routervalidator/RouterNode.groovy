@@ -11,6 +11,7 @@ class RouterNode {
 
     // parsed values
     ArrayList<String> decorators = new ArrayList<>();
+    ArrayList<String> configDecorators = new ArrayList<>();
     ArrayList<String> holders = new ArrayList<>();
     ArrayList<String> otherClasses = new ArrayList<>();
     ArrayList<String> resources = new ArrayList<>();
@@ -21,8 +22,12 @@ class RouterNode {
             item -> holders.add(classify(holdersPackageName, detuple(item)))
         }
 
-        values?.decorators?.forEach {
-            item -> decorators.add(classify(decoratorsPackageName, detuple(item)))
+        values?.decorators?.forEach { item ->
+            String decorator = classify(decoratorsPackageName, detuple(item))
+            decorators.add(decorator)
+            if (is_tuple(item)) {
+                configDecorators.add(decorator)
+            }
         }
 
         otherClasses.add detuple(values?.request?.pagination)
@@ -32,6 +37,10 @@ class RouterNode {
         scanForResources(resources, values)
 
         return this
+    }
+
+    static boolean is_tuple(Object object) {
+        return object instanceof Map;
     }
 
     static String detuple(Object object) {
