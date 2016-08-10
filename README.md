@@ -8,9 +8,9 @@ This project is based off [routable-android](https://github.com/clayallsopp/rout
 
 - drop Activity/Intent dependency
 - drop any launching Activity responsibility
-- leverage Android’s Bundle as an output of the router
 - leverage dynamic configuration (e.g. YAML file) over static Java code mappings
-- delegate Bundle creation to configurable developer written set of plugins
+- custom developer definied output of the router
+- delegate output creation to configurable developer written set of plugins
 - parametrized but logicless configuration
 - router-validator as an optional tool to aid development
 
@@ -26,13 +26,13 @@ repositories {
 }
 
 dependencies {
-    compile 'com.eyeem.router:router:0.0.2-SNAPSHOT'
+    compile 'com.eyeem.router:router:0.0.9-SNAPSHOT'
 }
 ```
 
 ### Configuration file
 
-It’s best to start with describing what paths your app will have and what kind of bundle they produce respectively. In this example we’ll use YAML to do so but you could use any other format as __router__ expects parsed java object and does not directly depend on any format.
+It’s best to start with describing what paths your app will have and what kind of output they produce respectively. In this example we’ll use YAML to do so but you could use any other format as __router__ expects parsed java object and does not directly depend on any format.
 
 ```yaml
 ---
@@ -63,16 +63,17 @@ As you can see, there are 2 paths: `home` and `user/:id/photos`. Let’s skip th
 Yaml yaml = new Yaml();  // using snake yaml parser for android
 Map<String, Object> routerMap = (Map<String, Object>) yaml.load(Assets.loadAssetTextAsString(this, "navigation.yaml"));
 
-Router router = RouterLoader.with(getContext()).load();
+Router router = RouterLoader.prepare().load(routerMap);
 ```
 
-Given the path, you can obtain the bundle now, e.g.:
+Given the path, you can obtain the output now, e.g.:
 
 ```java
-Bundle bundle = router.bundleFor("user/16/photos");
+// default implementation of AbstractRouter will return bundle
+Bundle bundle = router.outputFor("user/16/photos");
 ```
 
-What you do with this bundle now it’s up to you. You can pass it along with intent somewhere, set as an argument of the fragment ...pretty much everything. This is outside of scope of this document though.
+What you do with this output now it’s up to you. You can pass it along with intent somewhere, set as an argument of the fragment ...pretty much everything. This is outside of scope of this document though.
 
 ### Router Plugins
 
@@ -80,7 +81,7 @@ Going back to configuration file, you can observe that router paths have 0 inden
 
 ```java
 Router router = RouterLoader
-  .with(getContext())
+  .prepare()
   .plugin(new RequestPlugin())
   .load(routerMap);
 ```
@@ -123,7 +124,7 @@ public class RequestPlugin extends RouterLoader.Plugin {
 Given path from our sample:
 
 ```java
-Bundle bundle = router.bundleFor("user/16/photos?showNSFW=false")
+Bundle bundle = router.outputFor("user/16/photos?showNSFW=false")
 ```
 
 Then having obtained router context
@@ -140,7 +141,7 @@ You can set up params that will be always available globally in the RouteContext
 
 ```java
 Router router = RouterLoader
-  .with(getContext())
+  .prepare()
   .plugin(new RequestPlugin())
   .load(routerMap)
   .globalParam("isTablet", true)
@@ -155,14 +156,14 @@ context.getParams().get("isTablet"); // true
 context.getParams().get("isPhone");  // false
 ```
 
-#### Extra bundle
+#### Extra param
 
-You can pass an extra bundle to the path, e.g.:
+You can pass an extra param to the path, e.g.:
 
 ```java
 Bundle extra = new Bundle();
 extra.putSerializable("something", "extra");
-Bundle bundle = router.bundleFor("user/16/photos?showNSFW=false", extra);
+Bundle bundle = router.outputFor("user/16/photos?showNSFW=false", extra);
 ```
 
 Then having obtained router context:
@@ -186,10 +187,10 @@ At the path resolving time, router will scan the map and replace any params with
 By the time we reach the appropriate plugin, the value of the path will be already computed:
 
 ```java
-Bundle bundle = router.bundleFor("user/16/photos");
+Bundle bundle = router.outputFor("user/16/photos");
 
 // inside a plugin
-void bundleFor(Router.RouteContext context, Object config, Bundle bundle) {
+void outputFor(Router.RouteContext context, Object config, Bundle bundle) {
   Map map = (Map) config;
   String path = (String) map.get("path"); // /v2/users/16/photos
 }
@@ -211,7 +212,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.eyeem.router:router-validator:0.0.2-SNAPSHOT'
+        classpath 'com.eyeem.router:router-validator:0.0.9-SNAPSHOT'
     }
 }
 ```
@@ -223,15 +224,14 @@ router {
     path = "src/main/assets/navigation.yaml"
     packageName = "com.eyeem.router"
     decoratorsPackageName = "com.eyeem.decorator"
-    holdersPackageName = "com.eyeem.holders"
     resourcePackageName = "com.baseapp.eyeem"
 }
 ```
 
-Java Usage:
+Example Java Usage:
 
 ```
-Bundle bundle = router.bundleFor(RouterConstants.PATH_USER(id));
+Bundle bundle = router.outputFor(RouterConstants.PATH_USER(id));
 ```
 
 ### Key Advantages
