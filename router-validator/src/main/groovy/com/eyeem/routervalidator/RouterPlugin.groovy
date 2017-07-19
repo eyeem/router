@@ -12,9 +12,12 @@ class RouterPlugin implements Plugin<Project> {
         project.extensions.create('router', RouterPluginExtension)
 
         // Add 'router' as a source set extension
-        project.android.sourceSets.all { sourceSet ->
-            sourceSet.extensions.create('router', DefaultSourceDirectorySet, 'router', project.fileResolver)
-        }
+        // there's some discussion here but unsure if we need to care about this
+        // https://discuss.gradle.org/t/defaultsourcedirectoryset-alternative/15193
+        // This is broken in gradle 4.0
+//        project.android.sourceSets.all { sourceSet ->
+//            sourceSet.extensions.create('router', DefaultSourceDirectorySet, 'router', project.fileResolver)
+//        }
 
         project.afterEvaluate {
             // find variants in the project
