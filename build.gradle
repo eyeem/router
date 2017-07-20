@@ -3,7 +3,7 @@ apply from: file('metadata.gradle')
 
 ext {
     build_tools_version = "25.0.3"
-    compat_version = "25.3.0"
+    compat_version = "25.4.0"
 }
 
 buildscript {
