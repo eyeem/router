@@ -94,7 +94,7 @@ public abstract class AbstractRouterLoader<O, P> {
    }
 
    public static boolean isArrayOrMap(Object object) {
-      return object instanceof Map || object instanceof Array;
+      return object instanceof Map || object instanceof ArrayList;
    }
 
    public static Map.Entry<String, Object> tuple(Object object) {
