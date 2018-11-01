@@ -17,6 +17,7 @@ class ValidatorTask extends DefaultTask {
     @Input @Optional String holdersPackageName
     @Input String resourcePackageName
     @Input @Optional String configFor
+    @Input boolean classesCheck
 
     /**
      * The output directory.
@@ -71,6 +72,7 @@ class ValidatorTask extends DefaultTask {
                                 templateData: templateData,
                                 baseDir     : outputDir,
                                 packageName : packageName,
+                                classesCheck: classesCheck,
                                 className   : "RouterConstants"]
         emitter.print()
     }

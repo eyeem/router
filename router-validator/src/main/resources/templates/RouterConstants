@@ -20,17 +20,21 @@ public final class $className {
     ${node.path()}
     public static final String TYPE_${node.type.toUpperCase()} = "${node.type}";
 
-    <% if (node.decorators.size()) { %>
-    public static final Class[] DECORATORS_${node.type.toUpperCase()} = { ${node.decorators()} };
-    <% } %>
-    <% if (node.holders.size()) { %>
-    public static final Class[] HOLDERS_${node.type.toUpperCase()} = { ${node.holders()} };
-    <% } %>
-    <% if (node.resources.size()) { %>
-    public static final int[] RESOURCES_${node.type.toUpperCase()} = { ${node.resources()} };
-    <% } %>
-    <% if (node.otherClasses.size()) { %>
-    public static final Class[] OTHER_CLASSES_${node.type.toUpperCase()} = { ${node.otherClasses()} };
+    <% if (classesCheck) { %>
+
+      <% if (node.decorators.size()) { %>
+      public static final Class[] DECORATORS_${node.type.toUpperCase()} = { ${node.decorators()} };
+      <% } %>
+      <% if (node.holders.size()) { %>
+      public static final Class[] HOLDERS_${node.type.toUpperCase()} = { ${node.holders()} };
+      <% } %>
+      <% if (node.resources.size()) { %>
+      public static final int[] RESOURCES_${node.type.toUpperCase()} = { ${node.resources()} };
+      <% } %>
+      <% if (node.otherClasses.size()) { %>
+      public static final Class[] OTHER_CLASSES_${node.type.toUpperCase()} = { ${node.otherClasses()} };
+      <% } %>
+
     <% } %>
     // endregion
 

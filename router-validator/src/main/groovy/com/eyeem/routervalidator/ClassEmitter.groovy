@@ -9,7 +9,7 @@ class ClassEmitter {
     File baseDir
     String packageName
     String className
-    boolean configFor
+    boolean classesCheck
 
     private final GStringTemplateEngine engine = new GStringTemplateEngine()
 
@@ -17,7 +17,12 @@ class ClassEmitter {
         def targetDir = makeFileDir()
         new FileWriter("${targetDir}/${className}.java").withWriter { Writer writer ->
             engine.createTemplate(template)
-                    .make(data: templateData, packageName: packageName, className: className, configFor : configFor)
+                    .make(
+                        data: templateData,
+                        packageName: packageName,
+                        className: className,
+                        classesCheck: classesCheck
+                    )
                     .writeTo(writer)
         }
     }

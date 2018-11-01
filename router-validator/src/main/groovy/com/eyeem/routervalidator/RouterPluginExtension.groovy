@@ -7,4 +7,5 @@ class RouterPluginExtension {
     String holdersPackageName
     String resourcePackageName
     String configFor
+    boolean classesCheck = true
 }
